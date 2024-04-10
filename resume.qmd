@@ -1,0 +1,5 @@
+---
+title: "Nick Shuckerow's Resume"
+---
+
+{{< pdf Files/resume.pdf width=100% height=800 >}}

@@ -1,0 +1,17 @@
+---
+title: "Nick Shuckerow"
+image: "Files/profile_pic.jpg"
+about:
+  template: jolla
+  links:
+    - icon: envelope
+      href: mailto:nshuckerow@ucsd.edu
+    - icon: linkedin
+      href: https://www.linkedin.com/in/nick-shuckerow-4230b182/
+    - href: resume.qmd
+      text: Resume 
+---
+
+Welcome to my website!
+
+I am a Systems Engineer for Raytheon
