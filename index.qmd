@@ -9,7 +9,7 @@ about:
     - icon: linkedin
       href: https://www.linkedin.com/in/nick-shuckerow-4230b182/
     - href: resume.qmd
-      text: Resume 
+      text: Resumee
 ---
 
 Welcome to my website!
