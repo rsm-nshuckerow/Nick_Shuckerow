@@ -230,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Many of the columns are redundant (treatmeant vs control columns, ratio columns vs ratio1, ratio2, ratio3 columns), however they allow us to more easily filter the data and make calculations.</p>
 <p>In the second cell, you can see the description of variables ‘treatment’ and ‘control’. Through this, it is shown that 66% of the participants were a part of the treatment group, and 33% were a part of the control group.</p>
 <p>Since many of these variables are binary, a 1 or 0 is used to describe whether the participant had that treatment, variables, or attribute, which allows analysts to easily calculate proportions or percentages like with treatment and control.</p>
-<div id="fb8834ee" class="cell" data-execution_count="1">
+<div id="7f4211c1" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>karlan <span class="op">=</span> pd.read_stata(<span class="st">"karlan_list_2007.dta"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>karlan</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -543,7 +543,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<div id="56131161" class="cell" data-execution_count="2">
+<div id="699710c8" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>karlan.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
@@ -1004,10 +1004,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="balance-test" class="level3">
 <h3 class="anchored" data-anchor-id="balance-test">Balance Test</h3>
 <p>As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.</p>
-<p><em>todo: test a few variables other than the key outcome variables (for example, test months since last donation) to see if the treatment and control groups are statistically significantly different at the 95% confidence level. Do each as a t-test and separately as a linear regression, and confirm you get the exact same results from both methods. When doing a t-test, use the formula in the class slides. When doing the linear regression, regress for example mrm2 on treatment and look at the estimated coefficient on the treatment variable. It might be helpful to compare parts of your analysis to Table 1 in the paper. Be sure to comment on your results (hint: why is Table 1 included in the paper).</em></p>
+<!--_todo: test a few variables other than the key outcome variables (for example, test months since last donation) to see if the treatment and control groups are statistically significantly different at the 95% confidence level. Do each as a t-test and separately as a linear regression, and confirm you get the exact same results from both methods. When doing a t-test, use the formula in the class slides. When doing the linear regression, regress for example mrm2 on treatment and look at the estimated coefficient on the treatment variable. It might be helpful to compare parts of your analysis to Table 1 in the paper. Be sure to comment on your results (hint: why is Table 1 included in the paper)._ -->
 <section id="months-since-last-donation-variable" class="level4">
 <h4 class="anchored" data-anchor-id="months-since-last-donation-variable">Months since last Donation Variable</h4>
-<div id="823a903c" class="cell" data-execution_count="3">
+<div id="4eb53684" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Months since last donation t-test</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mrm2_treat <span class="op">=</span> karlan[karlan[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'mrm2'</span>]</span>
@@ -1029,7 +1029,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>0.11953155228176905</code></pre>
 </div>
 </div>
-<div id="767a1730" class="cell" data-execution_count="4">
+<div id="f76bc449" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate p-value</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1041,7 +1041,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>0.9048547235822526</code></pre>
 </div>
 </div>
-<div id="e1e04d14" class="cell" data-execution_count="5">
+<div id="0b376eca" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear Regression - mrm2</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyrsm <span class="im">as</span> rsm</span>
@@ -1075,7 +1075,7 @@ Nr obs: 50,082</code></pre>
 </section>
 <section id="couple-variable" class="level4">
 <h4 class="anchored" data-anchor-id="couple-variable">Couple Variable</h4>
-<div id="a1fe1cda" class="cell" data-execution_count="6">
+<div id="22ad79de" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>couple_treat <span class="op">=</span> karlan[karlan[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'couple'</span>]</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>couple_control <span class="op">=</span> karlan[karlan[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">0</span>][<span class="st">'couple'</span>]</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1095,7 +1095,7 @@ Nr obs: 50,082</code></pre>
 <pre><code>-0.5822577486768489</code></pre>
 </div>
 </div>
-<div id="062f44d7" class="cell" data-execution_count="7">
+<div id="8f499fac" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate p-value</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>p_couple <span class="op">=</span> stats.t.sf(<span class="bu">abs</span>(t_couple), couple_t_n <span class="op">+</span> couple_c_n <span class="op">-</span> <span class="dv">2</span>) <span class="op">*</span> <span class="dv">2</span></span>
@@ -1106,7 +1106,7 @@ Nr obs: 50,082</code></pre>
 <pre><code>0.5603957630249871</code></pre>
 </div>
 </div>
-<div id="b8d9e117" class="cell" data-execution_count="8">
+<div id="038733bf" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lr_couple <span class="op">=</span> rsm.regress(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> karlan[[<span class="st">'treatment'</span>, <span class="st">'couple'</span>]],</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    evar <span class="op">=</span> <span class="st">"treatment"</span>,</span>
@@ -1148,7 +1148,7 @@ Nr obs: 48,935</code></pre>
 <h3 class="anchored" data-anchor-id="charitable-contribution-made">Charitable Contribution Made</h3>
 <p>First, I analyze whether matched donations lead to an increased response rate of making a donation.</p>
 <p><em>todo: make a barplot with two bars. Each bar is the proportion of people who donated. One bar for treatment and one bar for control.</em></p>
-<div id="6a95f6a1" class="cell" data-execution_count="9">
+<div id="7698b2a5" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find proportion of treatment group that gave money</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>treat_gave <span class="op">=</span> karlan[karlan[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'gave'</span>].mean()</span>
@@ -1159,7 +1159,7 @@ Nr obs: 48,935</code></pre>
 <pre><code>0.02203856749311295 0.017858212980164198</code></pre>
 </div>
 </div>
-<div id="84c33985" class="cell" data-execution_count="10">
+<div id="346c0e8d" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create bar graph for proportion of treatment/control group that gave money</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -1178,7 +1178,7 @@ Nr obs: 48,935</code></pre>
 </div>
 </div>
 <p><em>todo: run a t-test between the treatment and control groups on the binary outcome of whether any charitable donation was made. Also run a bivariate linear regression that demonstrates the same finding. (It may help to confirm your calculations match Table 2a Panel A.) Report your statistical results and interpret them in the context of the experiment (e.g., if you found a difference with a small p-value or that was statistically significant at some threshold, what have you learned about human behavior? Use mostly English words, not numbers or stats, to explain your finding.)</em></p>
-<div id="9ff71c59" class="cell" data-execution_count="11">
+<div id="2110b430" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate t-stat for those who donated if they were a part of treatment or control group</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>gave_treat <span class="op">=</span> karlan[karlan[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'gave'</span>]</span>
@@ -1200,7 +1200,7 @@ Nr obs: 48,935</code></pre>
 <pre><code>3.2094621908279835</code></pre>
 </div>
 </div>
-<div id="1a9ec621" class="cell" data-execution_count="12">
+<div id="0df3015e" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate p-value on 95% confidence interval</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>p_gave <span class="op">=</span> stats.t.sf(<span class="bu">abs</span>(t_gave), gave_t_n <span class="op">+</span> gave_c_n <span class="op">-</span> <span class="dv">2</span>) <span class="op">*</span> <span class="dv">2</span></span>
@@ -1211,7 +1211,7 @@ Nr obs: 48,935</code></pre>
 <pre><code>0.0013306730060655475</code></pre>
 </div>
 </div>
-<div id="568559cb" class="cell" data-execution_count="13">
+<div id="42269c2a" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a linear regression which 'gave' is the response variable and 'treatment' is the explanatory variable</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>lr_gave <span class="op">=</span> rsm.regress(</span>
@@ -1242,7 +1242,7 @@ Nr obs: 50,083</code></pre>
 </div>
 <p>The outcome of our t-test and linear regression were both similar in that it was found at a 95% confidence interval that the treatment did cause an increase in the number of donations. The linear regression did not explain any variance in the data, however that is not as important because we are using what should be a logistic regression (binary outcome of 1 or 0 if they donated or not) with a linear regression model.</p>
 <p><em>todo: run a probit regression where the outcome variable is whether any charitable donation was made and the explanatory variable is assignment to treatment or control. Confirm that your results replicate Table 3 column 1 in the paper.</em></p>
-<div id="6db03f91" class="cell" data-execution_count="14">
+<div id="a3e37e0c" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run probit regression on gave and treatment variables</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
@@ -1285,7 +1285,7 @@ Nr obs: 50,083</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>19:40:26</td>
+<td>19:50:54</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-5030.5</td>
 </tr>
@@ -1342,7 +1342,7 @@ Nr obs: 50,083</code></pre>
 <p>Next, I assess the effectiveness of different sizes of matched donations on the response rate.</p>
 <section id="ratio-of-11-vs-ratio-of-21" class="level4">
 <h4 class="anchored" data-anchor-id="ratio-of-11-vs-ratio-of-21">Ratio of 1:1 vs Ratio of 2:1</h4>
-<div id="4eba8e31" class="cell" data-execution_count="15">
+<div id="68fd6efb" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate t-stat for Ratio 1:1 vs Ratio 2:1</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>gave_ratio1 <span class="op">=</span> karlan[karlan[<span class="st">'ratio'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'gave'</span>]</span>
@@ -1364,7 +1364,7 @@ Nr obs: 50,083</code></pre>
 <pre><code>0.965048975142932</code></pre>
 </div>
 </div>
-<div id="736085f1" class="cell" data-execution_count="16">
+<div id="165b1e09" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>p_gave_ratio <span class="op">=</span> stats.t.sf(<span class="bu">abs</span>(t_gave_ratio), gave_2_n <span class="op">+</span> gave_1_n <span class="op">-</span> <span class="dv">2</span>) <span class="op">*</span> <span class="dv">2</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>p_gave_ratio</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1376,7 +1376,7 @@ Nr obs: 50,083</code></pre>
 </section>
 <section id="ratio-of-21-vs-ratio-of-31" class="level4">
 <h4 class="anchored" data-anchor-id="ratio-of-21-vs-ratio-of-31">Ratio of 2:1 vs Ratio of 3:1</h4>
-<div id="7dd800c3" class="cell" data-execution_count="17">
+<div id="b44b46af" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>gave_ratio3 <span class="op">=</span> karlan[karlan[<span class="st">'ratio'</span>] <span class="op">==</span> <span class="dv">3</span>][<span class="st">'gave'</span>]</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>gave_ratio2 <span class="op">=</span> karlan[karlan[<span class="st">'ratio'</span>] <span class="op">==</span> <span class="dv">2</span>][<span class="st">'gave'</span>]</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1396,7 +1396,7 @@ Nr obs: 50,083</code></pre>
 <pre><code>-0.05011581369764474</code></pre>
 </div>
 </div>
-<div id="5c782c1a" class="cell" data-execution_count="18">
+<div id="d0b62593" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>p_gave_ratio_23 <span class="op">=</span> stats.t.sf(<span class="bu">abs</span>(t_gave_ratio_23), gave_2_n <span class="op">+</span> gave_3_n <span class="op">-</span> <span class="dv">2</span>) <span class="op">*</span> <span class="dv">2</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>p_gave_ratio_23</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1407,12 +1407,12 @@ Nr obs: 50,083</code></pre>
 </div>
 <p>The above calculations matches what Karlan suggests in his paper, that increasing the match ratio does not increase the probability of making a donation. The above calculations show a 1:1 match ratio when compared to a 2:1 match ratio, and a 2:1 match ratio when compared to a 3:1 match ratio. We did a two-sided t-test, which has a null hypothesis stating that 2:1 is not the same as 1:1, and 3:1 is not the same as 2:1.</p>
 <p><em>todo: Use a series of t-tests to test whether the size of the match ratio has an effect on whether people donate or not. For example, does the 2:1 match rate lead increase the likelihood that someone donates as compared to the 1:1 match rate? Do your results support the “figures suggest” comment the authors make on page 8?</em></p>
-<div id="ec201ad6" class="cell" data-execution_count="19">
+<div id="d549771b" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create a variable ratio1 where if ratio column equals 1, then ratio1 equlas 1, else 0</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>karlan[<span class="st">'ratio1'</span>] <span class="op">=</span> karlan[<span class="st">'ratio'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> x <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="57dabf2d" class="cell" data-execution_count="20">
+<div id="4c74f925" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression for match ratios and treatment</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>lr_ratio <span class="op">=</span> rsm.regress(</span>
@@ -1453,8 +1453,107 @@ Nr obs: 50,083</code></pre>
 <h3 class="anchored" data-anchor-id="size-of-charitable-contribution">Size of Charitable Contribution</h3>
 <p>In this subsection, I analyze the effect of the size of matched donation on the size of the charitable contribution.</p>
 <p><em>todo: Calculate a t-test or run a bivariate linear regression of the donation amount on the treatment status. What do we learn from doing this analysis?</em></p>
+<div id="5101b009" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear Regression on Treatment to Predict donation amount</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>lr_d_amount <span class="op">=</span> rsm.regress(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> karlan[[<span class="st">'amount'</span>, <span class="st">'treatment'</span>]],</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    evar <span class="op">=</span> <span class="st">'treatment'</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    rvar <span class="op">=</span> <span class="st">'amount'</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    )  </span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>lr_d_amount.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear regression (OLS)
+Data                 : Not provided
+Response variable    : amount
+Explanatory variables: treatment
+Null hyp.: the effect of x on amount is zero
+Alt. hyp.: the effect of x on amount is not zero
+
+           coefficient  std.error  t.value p.value     
+Intercept        0.813      0.067   12.063  &lt; .001  ***
+treatment        0.154      0.083    1.861   0.063    .
+
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-squared: 0.0, Adjusted R-squared: 0.0
+F-statistic: 3.461 df(1, 50081), p.value 0.063
+Nr obs: 50,083</code></pre>
+</div>
+</div>
+<p>From our linear regression model to calculate dollars donated amount from whether the donor was in the treatment or control group, we can conclude that the control group donates $0.813 and being a part of the treatment group increases that amount by $0.154, bringing the estimated dollars donated amount to $0.967. Per a 95% confidence interval, the model is not statistically significant, however it is very close to being so.</p>
+<div id="698852f0" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear Regression on treatment to predict donation amounts above 0</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>lr_d_amount_above0 <span class="op">=</span> rsm.regress(</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> karlan[karlan[<span class="st">'amount'</span>] <span class="op">&gt;</span> <span class="dv">0</span>][[<span class="st">'amount'</span>, <span class="st">'treatment'</span>]],</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    evar <span class="op">=</span> <span class="st">'treatment'</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    rvar <span class="op">=</span> <span class="st">'amount'</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    )  </span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>lr_d_amount_above0.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear regression (OLS)
+Data                 : Not provided
+Response variable    : amount
+Explanatory variables: treatment
+Null hyp.: the effect of x on amount is zero
+Alt. hyp.: the effect of x on amount is not zero
+
+           coefficient  std.error  t.value p.value     
+Intercept       45.540      2.423   18.792  &lt; .001  ***
+treatment       -1.668      2.872   -0.581   0.561     
+
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-squared: 0.0, Adjusted R-squared: -0.001
+F-statistic: 0.337 df(1, 1032), p.value 0.561
+Nr obs: 1,034</code></pre>
+</div>
+</div>
+<p>After filtering the data to only include those who donated, the linear regression model changed significantly. The intercept coefficient is now $45.54, and the treatment coefficient is now negative $1.67. Now, the treatment group has a negative affect on amount donated, meaning that the control group donates $45.54 and the treatment group donates $43.87.</p>
+<p>However, the model is not statistically significant at 95% confidence interval.</p>
 <p><em>todo: now limit the data to just people who made a donation and repeat the previous analysis. This regression allows you to analyze how much respondents donate conditional on donating some positive amount. Interpret the regression coefficients – what did we learn? Does the treatment coefficient have a causal interpretation?</em></p>
 <p><em>todo: Make two plot: one for the treatment group and one for the control. Each plot should be a histogram of the donation amounts only among people who donated. Add a red vertical bar or some other annotation to indicate the sample average for each plot.</em></p>
+<div id="36a43afa" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a histogram for all the donation amounts above 0 for the control group</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co"># have bin intervals be 25</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>ax.hist(karlan[(karlan[<span class="st">'amount'</span>] <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (karlan[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">0</span>)][<span class="st">'amount'</span>], bins<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="fl">43.87</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">43.87</span> <span class="op">+</span> <span class="dv">1</span>, ax.get_ylim()[<span class="dv">1</span>] <span class="op">*</span> <span class="fl">0.9</span>, <span class="ss">f'</span><span class="sc">{</span><span class="fl">43.87</span><span class="sc">}</span><span class="ss">'</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Donation Amount'</span>)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Frequency of Donation Amounts for Control Group'</span>)</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw1_questions_files/figure-html/cell-24-output-1.png" width="593" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="63b2a1e3" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>ax.hist(karlan[(karlan[<span class="st">'amount'</span>] <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (karlan[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>)][<span class="st">'amount'</span>], bins<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="fl">45.54</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">45.54</span> <span class="op">+</span> <span class="dv">1</span>, ax.get_ylim()[<span class="dv">1</span>] <span class="op">*</span> <span class="fl">0.9</span>, <span class="ss">f'</span><span class="sc">{</span><span class="fl">45.54</span><span class="sc">}</span><span class="ss">'</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Donation Amount'</span>)</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Frequency of Donation Amounts for Treatment Group'</span>)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="co"># add a line to the histogram at 43.87 and display the number 43.87</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw1_questions_files/figure-html/cell-25-output-1.png" width="593" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="simulation-experiment" class="level2">
