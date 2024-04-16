@@ -18,7 +18,8 @@ The letters sent to the treatment and control group were the same except in the 
 - The reply card for the treatment group had details on the matching grant.
 
 
-The letters were randomized through 3 different dimensions:
+The letters were randomized through 3 different dimensions.
+
 1. matching price ratio
 2. maximum match amount
 3. suggested donation amount
@@ -574,6 +575,8 @@ ax.set_xlabel('Difference in Proportion of Donors (Treatment - Control) in 500 D
 ax.set_title('Frequency of Proportion of Control Group that Gave Money in 500 Draws')
 plt.show()
 ```
+
+#### Simulating 1000 trials
 
 ```{python}
 
