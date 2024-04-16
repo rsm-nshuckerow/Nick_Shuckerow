@@ -213,7 +213,7 @@ For couple (whether the donor was a couple), the control group mean was 0.093 (i
 
 First, I analyze whether matched donations lead to an increased response rate of making a donation. 
 
-<!--_todo: make a barplot with two bars. Each bar is the proportion of people who donated. One bar for treatment and one bar for control._-->
+<!-- _todo: make a barplot with two bars. Each bar is the proportion of people who donated. One bar for treatment and one bar for control._ -->
 
 ```{python}
 # find proportion of treatment group that gave money
