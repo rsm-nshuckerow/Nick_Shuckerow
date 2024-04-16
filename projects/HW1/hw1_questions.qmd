@@ -213,7 +213,7 @@ For couple (whether the donor was a couple), the control group mean was 0.093 (i
 
 First, I analyze whether matched donations lead to an increased response rate of making a donation. 
 
-<!-- _todo: make a barplot with two bars. Each bar is the proportion of people who donated. One bar for treatment and one bar for control._ -->
+<!--_todo: make a barplot with two bars. Each bar is the proportion of people who donated. One bar for treatment and one bar for control._ -->
 
 ```{python}
 # find proportion of treatment group that gave money
@@ -524,7 +524,7 @@ n_50 = n_50_t - n_50_c
 fig, ax = plt.subplots()
 ax.hist(n_50, bins=10, rwidth=1)
 ax.axvline(n_50.mean(), color='red')
-ax.text(n_50.mean(), ax.get_ylim()[1], f'{np.round(n_50.mean(),4)}', color='red', verticalalignment='center', horizontalalignment='center')
+ax.text(n_50.mean(), ax.get_ylim()[1]*0.9, f'{np.round(n_50.mean(),4)}', color='red', verticalalignment='center', horizontalalignment='center')
 ax.set_ylabel('Frequency')
 ax.set_xlabel('Difference in Proportion of Donors (Treatment - Control) in 50 Draws')
 ax.set_title('Frequency of Proportion of Control Group that Gave Money in 50 Draws')
@@ -546,7 +546,7 @@ n_200_mean = n_200.mean()
 fig, ax = plt.subplots()
 ax.hist(n_200, bins=10, rwidth=1)
 ax.axvline(n_200_mean, color='red')
-ax.text(n_200_mean, ax.get_ylim()[1], f'{np.round(n_200_mean,4)}', color='red', verticalalignment='center', horizontalalignment='center')
+ax.text(n_200_mean, ax.get_ylim()[1]*0.9, f'{np.round(n_200_mean,4)}', color='red', verticalalignment='center', horizontalalignment='center')
 ax.set_ylabel('Frequency')
 ax.set_xlabel('Difference in Proportion of Donors (Treatment - Control) in 200 Draws')
 ax.set_title('Frequency of Proportion of Control Group that Gave Money in 200 Draws')
@@ -568,7 +568,7 @@ n_500_mean = n_500.mean()
 fig, ax = plt.subplots()
 ax.hist(n_500, bins=10, rwidth=1)
 ax.axvline(n_500_mean, color='red')
-ax.text(n_500_mean, ax.get_ylim()[1], f'{np.round(n_500_mean,4)}', color='red', verticalalignment='center', horizontalalignment='center')
+ax.text(n_500_mean, ax.get_ylim()[1]*0.9, f'{np.round(n_500_mean,4)}', color='red', verticalalignment='center', horizontalalignment='center')
 ax.set_ylabel('Frequency')
 ax.set_xlabel('Difference in Proportion of Donors (Treatment - Control) in 500 Draws')
 ax.set_title('Frequency of Proportion of Control Group that Gave Money in 500 Draws')
