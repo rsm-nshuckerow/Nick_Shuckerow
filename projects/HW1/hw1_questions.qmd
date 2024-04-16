@@ -35,11 +35,11 @@ Overall, the authors found a unique way to measure the scope of a public good (d
 
 ### Description
 
-The dataset seen below which Karlan and List gathered on the 50,083 subjects has over 52 columns or variables. The main ones are concerned about for our research are 'gave' (if the individual donated any amount), 'amount' (what amount they donated), 'treatment' (if they were a part of the treatment or control group), and 'ratio' (matching ratio given to that subject).
+The dataset seen below which Karlan and List gathered on the 50,083 subjects has over 52 columns or variables. The primary variables we are concerned with for our research are 'gave' (if the individual donated any amount), 'amount' (what amount they donated), 'treatment' (if they were a part of the treatment or control group), and 'ratio' (matching ratio given to that subject).
 
-Many of the columns are redundant (treatmeant vs control columns, ratio columns vs ratio1, ratio2, ratio3 columns), however they allow us to more easily filter the data and make calculations.
+Many of the columns are redundant (treatmeant vs control columns, ratio columns vs ratio1, ratio2, ratio3 columns), however they allow us to more easily filter the data and make calculations since they are in binary format, rather than categorical (text).
 
-In the second cell, you can see the description of variables 'treatment' and 'control'. Through this, it is shown that 66% of the participants were a part of the treatment group, and 33% were a part of the control group.
+In the second cell, you can see the description of variables, including the first two variables, 'treatment' and 'control'. Through this, it is shown that 66% of the participants were a part of the treatment group, and 33% were a part of the control group.
 
 Since many of these variables are binary, a 1 or 0 is used to describe whether the participant had that treatment, variables, or attribute, which allows analysts to easily calculate proportions or percentages like with treatment and control.
 
