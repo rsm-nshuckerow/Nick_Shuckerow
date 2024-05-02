@@ -19,7 +19,6 @@ However, Blueprinty has collected data on 1,500 mature (non-startup) engineering
 
 ### Data
 
-_todo: Read in data._
 ``` {python}
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -43,7 +42,6 @@ data['Unnamed: 0'].nunique()
 
 Each row is fact for an business which is not repeated in the dataset.
 
-_todo: Compare histograms and means of number of patents by customer status. What do you observe?_
 
 ``` {python}
 # count number of customers and non-customers
@@ -96,7 +94,6 @@ Both plots have a large drop off around 6 patents (For customers it is slightly 
 
 Blueprinty customers are not selected at random. It may be important to account for systematic differences in the age and regional location of customers vs non-customers.
 
-_todo: Compare regions and ages by customer status. What do you observe?_
 
 First, we'll create a table showing the counts for each region based on customers and non-customers. We'll looking at the proportion which each region has respectively for customers and non-customers.
 
@@ -203,13 +200,10 @@ The confidence interval for the mean age of customers is (23.1, 25.2) and the co
 
 Since our outcome variable of interest can only be small integer values per a set unit of time, we can use a Poisson density to model the number of patents awarded to each engineering firm over the last 5 years. We start by estimating a simple Poisson model via Maximum Likelihood.
 
-_todo: Write down mathematically the likelihood for_ $Y \sim \text{Poisson}(\lambda)$. Note that $f(Y|\lambda) = e^{-\lambda}\lambda^Y/Y!$.
-
 Below is the log-likelihood function for the Poisson distribution. The likelihood function of lambda given Y is the exact same as the function of Y given lambda.
 
 ℓ(λ∣Y)=−λ+Ylog(λ)−log(Y!)
 
-_todo: Code the likelihood (or log-likelihood) function for the Poisson model. This is a function of lambda and Y. For example:_
 
 Below is the code for the log-likelihood function for a poisson distribution:
 
@@ -236,8 +230,6 @@ def poisson_log_likelihood(lam, y):
 
 ```
 
-_todo: Use your function to plot lambda on the horizontal axis and the likelihood (or log-likelihood) on the vertical axis for a range of lambdas (use the observed number of patents as the input for Y)._
-
 
 Next, we'll plot the log-likelihoods using our observed number of lambdas as Y and then a range of values for lambda (1-10).
 
@@ -263,9 +255,7 @@ plt.title('Likelihood of observing the data given Lambda')
 plt.show()
 ```
 
-_todo: If you're feeling mathematical, take the first derivative of your likelihood or log-likelihood, set it equal to zero and solve for lambda. You will find lambda_mle is Ybar, which "feels right" because the mean of a Poisson distribution is lambda._
-
-_todo: Find the MLE by optimizing your likelihood function with optim() in R or sp.optimize() in Python._
+We'll now create our negative poisson MLE function and analyze the output betas. 
 
 ```{python}
 
@@ -302,7 +292,7 @@ result
 
 Next, we extend our simple Poisson model to a Poisson Regression Model such that $Y_i = \text{Poisson}(\lambda_i)$ where $\lambda_i = \exp(X_i'\beta)$. The interpretation is that the success rate of patent awards is not constant across all firms ($\lambda$) but rather is a function of firm characteristics $X_i$. Specifically, we will use the covariates age, age squared, region, and whether the firm is a customer of Blueprinty.
 
-_todo: Update your likelihood or log-likelihood function with an additional argument to take in a covariate matrix X. Also change the parameter of the model from lambda to the beta vector. In this model, lambda must be a positive number, so we choose the inverse link function g() to be exp() so that_ $\lambda_i = e^{X_i'\beta}$. _For example:_
+First, we'll create our new poisson MLE function, incorporating our explanatory variables into the calculation.
 
 ```{python}
 import numpy as np
@@ -316,7 +306,7 @@ def poisson_regression_log_likelihood(beta, Y, X):
 
 ```
 
-_todo: Use your function along with R's optim() or Python's sp.optimize() to find the MLE vector and the Hessian of the Poisson model with covariates. Specifically, the first column of X should be all 1's to enable a constant term in the model, and the subsequent columns should be age, age squared, binary variables for all but one of the regions, and the binary customer variable. Use the Hessian to find standard errors of the beta parameter estimates and present a table of coefficients and standard errors._
+Next, we'll change the format of the data to be able to be used in our functions and analysis.
 
 ```{python}
 
@@ -367,7 +357,7 @@ result = minimize(poisson_regression_log_likelihood, initial_beta, args=(Y, X), 
 print("Optimal beta:", result.x)
 ```
 
-_todo: Check your results using R's glm() function or Python sm.GLM() function._
+Now that we calculated our betas from our self-built function, we'll verify our betas with a built-in regression function.
 
 ```{python}
 
@@ -383,6 +373,7 @@ print(poisson_model.summary())
 
 ```
 
+Finally, we'll calculate our standard errors for each respective beta or coefficient and compare to our built-in regression analysis results. 
 
 ```{python}
 
@@ -397,11 +388,13 @@ print("Standard Errors:", std_errors)
 
 ```
 
-_todo: Interpret the results. What do you conclude about the effect of Blueprinty's software on patent success?_
+
 
 We can conclude, based on our optimal beta's through our regression model, that Blueprinty's software has a positive effect on the number of patents awarded to a company. The coefficient or beta calculated for "iscustomer" is 0.11, meaning if they are a customer of the software, the humber of patents earned increases by 0.11. 
 
 We also see that p-value of "iscustomer" is 0.002, meaning there is only a 0.2% chance that the coefficient has zero affect on the number of patents given the dataset. 
+
+Our standard errors we're slightly off for some of the variables, which may mean our self-built function has an issue, or we are using a different optimization method (ie. BFGS, L-BFGS-B) than the built-in function. 
 
 
 ## AirBnB Case Study
@@ -430,7 +423,6 @@ AirBnB is a popular platform for booking short-term rentals. In March 2017, stud
 ::::
 
 
-_todo: Assume the number of reviews is a good proxy for the number of bookings. Perform some exploratory data analysis to get a feel for the data, handle or drop observations with missing values on relevant variables, build one or more models (e.g., a poisson regression model for the number of bookings as proxied by the number of reviews), and interpret model coefficients to describe variation in the number of reviews as a function of the variables provided._
 
 Using the airbnb data, we will build a likelihood function for this poisson regression. However, we first need to read the data and look at its characteristics.
 
@@ -442,7 +434,7 @@ airbnb = pd.read_csv('airbnb.csv')
 
 airbnb.head()
 
-````
+```
 ```{python}
 # count number of listings which have 0 reviews
 airbnb[airbnb['number_of_reviews'] == 0]['number_of_reviews'].count()
