@@ -20,13 +20,184 @@ However, Blueprinty has collected data on 1,500 mature (non-startup) engineering
 ### Data
 
 _todo: Read in data._
+``` {python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.optimize import minimize
+
+# Load the data
+
+data = pd.read_csv('blueprinty.csv')
+
+data.head()
+```
+
+After reading in the data, we want to confirm that all businesses are unique and are not listed twice in the data
+
+``` {python}
+# count the number of unique values in the column 'Unnamed: 0'
+
+data['Unnamed: 0'].nunique()
+```
+
+Each row is fact for an business which is not repeated in the dataset.
 
 _todo: Compare histograms and means of number of patents by customer status. What do you observe?_
+
+``` {python}
+# count number of customers and non-customers
+
+customers = data[data['iscustomer']==1]['iscustomer'].count()
+non_customers = data[data['iscustomer']==0]['iscustomer'].count()
+
+print(f' There are {customers} customers and {non_customers} non-customers in the dataset.')
+```
+
+Now we will compare histograms based on number of patents for customers and non-customers on two separate plots.
+
+``` {python}
+# histogram of # of patents for Customers
+
+
+data[data['iscustomer'] == 1]['patents'].hist()
+
+plt.xlabel('Number of Patents')
+plt.ylabel('Frequency')
+plt.title('Frequency of Patents for Customers')
+```
+
+``` {python}
+# histogram of # of patents for non-customers
+
+
+data[data['iscustomer'] == 0]['patents'].hist()
+
+plt.xlabel('Number of Patents')
+plt.ylabel('Frequency')
+plt.title('Frequency of Patents for Customers')
+```
+
+Next, we'll look at mean number of patents for customers and non-customers so we have a baseline for the histograms
+
+``` {python}
+mean_patents_customers = data[data['iscustomer'] == 1]['patents'].mean()
+mean_patents_noncustomers = data[data['iscustomer'] == 0]['patents'].mean()
+
+print('Mean patents for customers:', round(mean_patents_customers,2))
+print('Mean patents for non-customers:', round(mean_patents_noncustomers,2))
+```
+
+The number of patents for customers is slightly skewed right, however it has a more normal distribution than the number of patents for non-customers.
+
+Both plots have a large drop off around 6 patents (For customers it is slightly less than 6). The number of non-customers is significantly higher than the number of customers, totaling to 1303 non-customers and 197 customers. The mean number of patents for customers was 4.09 and the mean number of patents for non-customers was 3.62. This is a difference of about 0.5 patents. The number of customers and non-customers is important to keep into account when conducting regression models, as non-customers have a higher weight due to the higher frequency of occurence in the dataset. 
+
+
 
 Blueprinty customers are not selected at random. It may be important to account for systematic differences in the age and regional location of customers vs non-customers.
 
 _todo: Compare regions and ages by customer status. What do you observe?_
 
+First, we'll create a table showing the counts for each region based on customers and non-customers. We'll looking at the proportion which each region has respectively for customers and non-customers.
+
+```{python}
+# group by region and count number of customers and non-customers
+
+region = data.groupby('region')['iscustomer'].value_counts().unstack()
+
+# Calculate respective proportion of non-customers and customers which make up each region
+
+region['Prop_Non_cust'] = region[0]/(region[0].sum())
+region['Prop_Cust'] = region[1]/(region[1].sum())
+
+# Rename columns from 0 to Non-Customers and 1 to Customers
+
+region.rename(columns={0:'Non-Customers', 1:'Customers'}, inplace=True)
+
+region
+```
+
+Below, you'll see a plot of the customers and non-customers by region.
+
+``` {python}
+# create a plot of the number of customers and non-customers by region side by side
+
+data.groupby('region')['iscustomer'].value_counts().unstack().plot(kind='bar', stacked=False)
+
+plt.xlabel('Region')
+plt.ylabel('Count')
+plt.title('Number of Customers and Non-Customers by Region')
+plt.legend(['Non-Customer', 'Customer'])
+```
+
+The Northeast has by far the most customers and non-customers, and the number of non-customers in each region clearly outweighs the number of customers. Although ranking each respective customer and non-customer base by region comes out to be nearly the same ranking, the proportions are different. 
+
+For the customers, nearly 60% are from the NE, while only 40% of non-customers are from the NE. 
+
+Next, we'll do the same as we did for regions, except with age. One variation between the two will be binning the age groups for every 5 years. In this case, 0-5 years is one group, 5-10 years is another group, etc.
+
+```{python}
+# group by age with bins every 5 years and count number of customers and non-customers
+
+data['age_bins'] = pd.cut(data['age'], bins=range(0, 60, 5))
+
+age = data.groupby('age_bins')['iscustomer'].value_counts().unstack()
+age['Prop_Non_cust'] = age[0]/(age[0].sum())
+age['Prop_Cust'] = age[1]/(age[1].sum())
+
+age.rename(columns={0:'Non-Customers', 1:'Customers'}, inplace=True)
+
+age
+```
+
+
+```{python}
+# create a plot of the number of customers and non-customers by age side by side
+
+data.groupby('age_bins')['iscustomer'].value_counts().unstack().plot(kind='bar', stacked=False)
+plt.xlabel('Age of Company')
+plt.ylabel('Count')
+plt.title('Number of Customers and Non-Customers by Age of Company')
+plt.legend(['Non-Customer', 'Customer'])
+```
+
+For age, we'll also look at the mean age of customers and non-customers, and calculate the 95% confidence intervals.
+
+```{python}
+# find mean age for customers and non-customers
+
+mean_age_customers = data[data['iscustomer'] == 1]['age'].mean()
+mean_age_noncustomers = data[data['iscustomer'] == 0]['age'].mean()
+
+print('Mean age for customers:', round(mean_age_customers,2))
+print('Mean age for non-customers:', round(mean_age_noncustomers,2))
+```
+
+```{python}
+# Calculate a 95% confidence interval for the mean age of customers and non-customers
+
+import numpy as np
+
+std_age_customers = data[data['iscustomer'] == 1]['age'].std()
+std_age_noncustomers = data[data['iscustomer'] == 0]['age'].std()
+
+n_customers = data[data['iscustomer'] == 1]['age'].count()
+n_noncustomers = data[data['iscustomer'] == 0]['age'].count()
+
+z = 1.96
+
+ci_customers = z * (std_age_customers/np.sqrt(n_customers))
+ci_noncustomers = z * (std_age_noncustomers/np.sqrt(n_noncustomers))
+
+print('95% CI for mean age of customers:', round(mean_age_customers-ci_customers,2), round(mean_age_customers+ci_customers,2))
+print('95% CI for mean age of non-customers:', round(mean_age_noncustomers-ci_noncustomers,2), round(mean_age_noncustomers+ci_noncustomers,2))
+```
+
+The most customers come from companies which are between 15-20 years old, with the average company age being about 24 years. The most non-customers come from companies which are between 20-25 years old, with the average company age being about 27 years.
+
+The distribution of company ages for customers and non-customers resembles a normal distribution, with a slight skew to the right. The largest disparity between the two distributions is at the 10-15 year mark, where the % of non-customers is 10% lower than that of customers (16%, 26%).
+
+The confidence interval for the mean age of customers is (23.1, 25.2) and the confidence interval for the mean age of non-customers is (26.3, 27.1). 
 
 ### Estimation of Simple Poisson Model
 
@@ -34,20 +205,98 @@ Since our outcome variable of interest can only be small integer values per a se
 
 _todo: Write down mathematically the likelihood for_ $Y \sim \text{Poisson}(\lambda)$. Note that $f(Y|\lambda) = e^{-\lambda}\lambda^Y/Y!$.
 
+Below is the log-likelihood function for the Poisson distribution. The likelihood function of lambda given Y is the exact same as the function of Y given lambda.
+
+ℓ(λ∣Y)=−λ+Ylog(λ)−log(Y!)
+
 _todo: Code the likelihood (or log-likelihood) function for the Poisson model. This is a function of lambda and Y. For example:_
 
-```
-poisson_loglikelihood <- function(lambda, Y){
-   ...
-}
+Below is the code for the log-likelihood function for a poisson distribution:
+
+```{python}
+
+def poisson_log_likelihood(lam, y):
+    """
+    Parameters:
+    - lam (float): The rate parameter (lambda) of the Poisson distribution.
+    - y (array-like): Array of observed counts.
+
+    Returns:
+    - float: The log likelihood of observing the data given lam.
+    """
+    y = np.array(y)
+    n = len(y)  # number of observations
+    sum_y = np.sum(y)  # sum of all observed counts
+
+    # Calculate each part of the log likelihood
+    # log(P(Y|lam)) = -n * lam + sum_y * log(lam) - log(y_i!)
+    # We use np.sum(np.log(y_factorials)) to sum log of factorials
+    log_likelihood = -n * lam + sum_y * np.log(lam) - np.sum([np.log(np.math.factorial(i)) for i in y])
+    return log_likelihood
+
 ```
 
 _todo: Use your function to plot lambda on the horizontal axis and the likelihood (or log-likelihood) on the vertical axis for a range of lambdas (use the observed number of patents as the input for Y)._
+
+
+Next, we'll plot the log-likelihoods using our observed number of lambdas as Y and then a range of values for lambda (1-10).
+
+```{python}
+
+years = range(1,11)
+log_likelihood_values = []
+
+for i in years:
+    log_likelihood_value = poisson_log_likelihood(i, data['patents'])
+    log_likelihood_values.append(log_likelihood_value)
+
+log_likelihood_values
+
+```
+
+```{python}
+
+plt.plot(years, log_likelihood_values)
+plt.xlabel('Lambda')
+plt.ylabel('Likelihood')
+plt.title('Likelihood of observing the data given Lambda')
+plt.show()
+```
 
 _todo: If you're feeling mathematical, take the first derivative of your likelihood or log-likelihood, set it equal to zero and solve for lambda. You will find lambda_mle is Ybar, which "feels right" because the mean of a Poisson distribution is lambda._
 
 _todo: Find the MLE by optimizing your likelihood function with optim() in R or sp.optimize() in Python._
 
+```{python}
+
+from scipy.optimize import minimize
+
+def neg_poisson_log_likelihood(lam, y):
+    """
+    Parameters:
+    - lam (float): The rate parameter (lambda) of the Poisson distribution.
+    - y (array-like): Array of observed counts.
+
+    Returns:
+    - float: The log likelihood of observing the data given lam.
+    """
+    y = np.array(y)
+    n = len(y)  # number of observations
+    sum_y = np.sum(y)  # sum of all observed counts
+
+    # Calculate each part of the log likelihood
+    # log(P(Y|lam)) = -n * lam + sum_y * log(lam) - log(y_i!)
+    # We use np.sum(np.log(y_factorials)) to sum log of factorials
+    return -(-n * lam + sum_y * np.log(lam) - np.sum([np.log(np.math.factorial(i)) for i in y]))
+```
+
+```{python}
+mean = np.mean(data['patents'])
+
+result = minimize(neg_poisson_log_likelihood, mean, args=(data['patents']), bounds = [(0, None)])
+
+result
+```
 
 ### Estimation of Poisson Regression Model
 
@@ -55,19 +304,104 @@ Next, we extend our simple Poisson model to a Poisson Regression Model such that
 
 _todo: Update your likelihood or log-likelihood function with an additional argument to take in a covariate matrix X. Also change the parameter of the model from lambda to the beta vector. In this model, lambda must be a positive number, so we choose the inverse link function g() to be exp() so that_ $\lambda_i = e^{X_i'\beta}$. _For example:_
 
-```
-poisson_regression_likelihood <- function(beta, Y, X){
-   ...
-}
+```{python}
+import numpy as np
+from scipy.optimize import minimize
+
+def poisson_regression_log_likelihood(beta, Y, X):
+    eta = np.dot(X, beta)
+    lambda_i = np.exp(eta)
+    log_likelihood = np.sum(Y * eta - lambda_i)
+    return -log_likelihood
+
 ```
 
 _todo: Use your function along with R's optim() or Python's sp.optimize() to find the MLE vector and the Hessian of the Poisson model with covariates. Specifically, the first column of X should be all 1's to enable a constant term in the model, and the subsequent columns should be age, age squared, binary variables for all but one of the regions, and the binary customer variable. Use the Hessian to find standard errors of the beta parameter estimates and present a table of coefficients and standard errors._
 
+```{python}
+
+# convert regions column to boolean columns, dropping the first region to be the default value
+
+data = pd.get_dummies(data, columns=['region'], drop_first=True)
+
+# creating function to convert boolean column to binary
+
+def convert_boolean_to_binary(data, column):
+    data[column] = data[column].astype(int)
+    return data
+
+# coverting region's boolean values to binary
+
+data = convert_boolean_to_binary(data, 'region_Northeast')
+data = convert_boolean_to_binary(data, 'region_South')
+data = convert_boolean_to_binary(data, 'region_Southwest')
+data = convert_boolean_to_binary(data, 'region_Northwest')
+
+# creating an age^2 column in the dataset
+
+data['age_squared'] = data['age']**2
+
+```
+
+```{python}
+# Load and preprocess your data as before, ensuring that features are scaled
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+# Scaling age and age_squared to prevent precision loss from extremely large numbers
+data['age'] = scaler.fit_transform(data[['age']])
+data['age_squared'] = scaler.fit_transform(data[['age_squared']])
+
+
+# Defining X and Y variables
+X = np.c_[np.ones(len(data)), data['age'], data['age_squared'], data['iscustomer'], data['region_Southwest'], data['region_Northwest'],
+          data['region_Northeast'], data['region_South']]
+Y = data['patents'].values
+
+# Initial guess for beta (0)
+initial_beta = np.zeros(X.shape[1])
+
+# Minimization
+result = minimize(poisson_regression_log_likelihood, initial_beta, args=(Y, X), method='BFGS')
+
+print("Optimal beta:", result.x)
+```
+
 _todo: Check your results using R's glm() function or Python sm.GLM() function._
+
+```{python}
+
+import statsmodels.api as sm
+
+# Fit a Poisson regression model using statsmodels
+
+poisson_model = sm.GLM(Y, X, family=sm.families.Poisson()).fit()
+
+# Print the summary of the model
+
+print(poisson_model.summary())
+
+```
+
+
+```{python}
+
+# Calculate Hessian at the optimal beta
+from scipy.linalg import inv
+hessian_inv = result.hess_inv  # Inverse Hessian is returned by BFGS
+
+# Calculating standard errors by taking the square roots of the diagonal elements of the inverse Hessian
+std_errors = np.sqrt(np.diag(hessian_inv))
+
+print("Standard Errors:", std_errors)
+
+```
 
 _todo: Interpret the results. What do you conclude about the effect of Blueprinty's software on patent success?_
 
+We can conclude, based on our optimal beta's through our regression model, that Blueprinty's software has a positive effect on the number of patents awarded to a company. The coefficient or beta calculated for "iscustomer" is 0.11, meaning if they are a customer of the software, the humber of patents earned increases by 0.11. 
 
+We also see that p-value of "iscustomer" is 0.002, meaning there is only a 0.2% chance that the coefficient has zero affect on the number of patents given the dataset. 
 
 
 ## AirBnB Case Study
@@ -98,7 +432,170 @@ AirBnB is a popular platform for booking short-term rentals. In March 2017, stud
 
 _todo: Assume the number of reviews is a good proxy for the number of bookings. Perform some exploratory data analysis to get a feel for the data, handle or drop observations with missing values on relevant variables, build one or more models (e.g., a poisson regression model for the number of bookings as proxied by the number of reviews), and interpret model coefficients to describe variation in the number of reviews as a function of the variables provided._
 
+Using the airbnb data, we will build a likelihood function for this poisson regression. However, we first need to read the data and look at its characteristics.
+
+```{python}
+
+# read airbnb csv
+
+airbnb = pd.read_csv('airbnb.csv')
+
+airbnb.head()
+
+````
+```{python}
+# count number of listings which have 0 reviews
+airbnb[airbnb['number_of_reviews'] == 0]['number_of_reviews'].count()
+```
+```{python}
+# create subset of data which only shows bedrooms which are nan
+
+airbnb.isnull().sum()
+```
+
+Looking at the data initally, we see there are many cells having null values which we need to address. The majority of them are within the review score columns. To address this, we will drop the cells which have 0 days listed (brand new listings). For bedrooms and bathrooms in a shared or private room, we will assume bedrooms is 1 and bathrooms are 0. It is very common for rooms to not have a bathroom. For all other data which is null, we cannot say with reasonable certainty what the value would be. For example, if bedrooms or bathrooms are null for entire home or apartment, we cannot say with reasonable certainty the number of bedrooms or bathrooms.
+
+```{python}
+# fill bedrooms with 1 and bathrooms with 0 if nan and if room type is private or shared room
+
+airbnb.loc[(airbnb['bedrooms'].isnull()) & (airbnb['room_type'] == 'Private room'), 'bedrooms'] = 1
+airbnb.loc[(airbnb['bedrooms'].isnull()) & (airbnb['room_type'] == 'Shared room'), 'bedrooms'] = 1
+airbnb.loc[(airbnb['bathrooms'].isnull()) & (airbnb['room_type'] == 'Private room'), 'bathrooms'] = 0
+airbnb.loc[(airbnb['bathrooms'].isnull()) & (airbnb['room_type'] == 'Private room'), 'bathrooms'] = 0
+```
+
+```{python}
+# Dropping all other rows which have null values
+airbnb = airbnb.dropna()
+```
+
+```{python}
+airbnb.shape
+```
+
+```{python}
+airbnb.describe()
+```
+
+```{python}
+airbnb.info()
+```
 
 
 
+The average number of reviews is 15.9 for this dataset, however the standard deviation is 29.25, meaning there is a large spread in the number of reviews, with many locations having 0 reviews (Right skewed)
 
+Most of the listings in the dataset rank very high in cleanliness, location, and value, with all having an average of above 9 out of 10.
+
+The price of the listings is also left skewed, with the average price being $145, but the standard deviation being $211, meaning there is a large spread in the price of listings like the number of reviews. However with this spread, due to the fact that the price can't be negative, the distribution is left skewed.
+
+While looking at the info for the columns, we will need to convert some of the variables for regression analysis. The columns need be an integer or float data type. We will be changing room type and instant bookable columns.
+
+```{python}
+# convert room_type to boolean
+
+airbnb = pd.get_dummies(airbnb, columns=['room_type'], drop_first=True)
+```
+
+```{python}
+for i in airbnb['instant_bookable']:
+    if i == 't':
+        airbnb['instant_bookable'] = 1
+    else:
+        airbnb['instant_bookable'] = 0
+```
+
+Prior to building the regression model, we need to make sure the data is all in the same time interval since we are assuming it's a poisson distribution.
+
+```{python}
+# Converting number of reviews to reviews per year
+
+airbnb['reviews_per_year'] = airbnb['number_of_reviews'] / airbnb['days'] * 365
+```
+
+We will also be scaling the data in order to prevent precision loss during our regression analysis.
+
+```{python}
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+# Assuming 'age' and 'age_squared' need scaling
+airbnb['days_scaled'] = scaler.fit_transform(airbnb[['days']])
+airbnb['price'] = scaler.fit_transform(airbnb[['price']])
+airbnb['review_scores_cleanliness'] = scaler.fit_transform(airbnb[['review_scores_cleanliness']])
+airbnb['review_scores_location'] = scaler.fit_transform(airbnb[['review_scores_location']])
+airbnb['review_scores_value'] = scaler.fit_transform(airbnb[['review_scores_value']])
+```
+
+Next, we will use the previously generated MLE function to get the maximum likelihood estimators to predict our reviews per year. 
+
+```{python}
+
+X = np.c_[np.ones(len(airbnb)), airbnb['days_scaled'], airbnb['bathrooms'], airbnb['bedrooms'], airbnb['price'], 
+          airbnb['review_scores_cleanliness'], airbnb['review_scores_location'], airbnb['review_scores_value'], 
+          airbnb['instant_bookable'], airbnb['room_type_Private room'], airbnb['room_type_Shared room']]
+Y = airbnb['reviews_per_year'].values
+
+# Initial guess for beta
+initial_beta = np.zeros(X.shape[1])
+
+# Minimization
+result = minimize(poisson_regression_log_likelihood, initial_beta, args=(Y, X), method='BFGS')
+
+print("Optimal beta:", result.x)
+```
+
+Next, we will confirm our betas with a built-in regression function.
+
+```{python}
+# Fit a Poisson regression model using statsmodels
+
+poisson_model = sm.GLM(Y, X, family=sm.families.Poisson()).fit()
+
+# Print the summary of the model
+
+print(poisson_model.summary())
+```
+
+Our coefficients match, meaning per the data and our manipulation, we calculated the betas correctly.
+
+Below, we are grouping the some of the data to potentially get a better explanation and generate a reasonable hypothesis for the outcome of the betas.
+
+```{python}
+# grouping the data based on days (binning the days) and reviews_per_year (binning reviews per year)
+
+airbnb['days_bins'] = pd.cut(airbnb['days'], bins=range(0, 400, 50))
+
+airbnb['reviews_per_year_bins'] = pd.cut(airbnb['reviews_per_year'], bins=range(0, 150, 25))
+
+days_reviews = airbnb.groupby('days_bins')['reviews_per_year_bins'].value_counts().unstack()
+
+days_reviews
+```
+
+```{python}
+# making each column in days_reviews proportional to the sum of the number in each row
+
+days_reviews['sum'] = days_reviews.sum(axis=1)
+days_reviews = days_reviews.div(days_reviews['sum'], axis=0)
+days_reviews.drop(columns='sum', inplace=True)
+
+days_reviews
+```
+
+Looking at the betas calculated from our Poisson Regression Likelihood model, the first explanatory variable analyzed was days listed. Days listed seems to have a negative affect on the number of reviews, with a beta of -0.91. This is significant considering the other betas. The explanation for this may be that people like to see brand new listings since as time goes on, the listings have more wear and tear, thus review scores start to decrease. However, the other explanation is there is an omitted variable we are missing that was not captured in this dataset.
+
+In the days_reviews table above, it shows the proportion of reviews_per_year in comparison to each days bin. It does seem like as the number of days increases, the number of reviews per year decreases with the exception of the first bin (0-25 reviews per year). 
+
+
+Bathrooms also has a slightly negative affect on the number of reviews, with a beta of -0.011. This is not as significant as some of the other variables, and may be leading to omitted variable bias. However, an explanation may be that rooms are more popular than homes for the individuals in this area. If they are staying short term, they may have a bathroom outside the room.
+
+Bedrooms do have a positive effect on the number of reviews, with a beta of 0.10. Meaning an entire house or apartment is more likely to get more reviews than a shared room. This is significant, and may be due to the fact that people are more likely to stay in a place with more bedrooms if they are traveling with a group. They also may be more likely to leave a review if traveling with a group.
+
+Price has a negative effect on reviews per year, with a beta of -0.088. This may be explained by the income class of those staying and the increased prices in NYC. Most people try and spend the least amount of money as possible in order to have a satisfactory experience. 
+
+Review scores all have a positive effect on reviews_per_year with value having the largest affect. As stated above, most people want to spend the least amount of money for a satisfactory experience, so if a place is respectively inexpensive and has a high value rating by others, than that will attract others to stay.
+
+Instant bookable has a significant positive effect on reviews_per_year. This aligns with the American society values. People want to be able to have control at the touch of a button. They lose interest quickly if the have to wait and want immediate feedback. Instant bookings provide that instant feedback.
+
+Private and shared rooms have a slightly negative effect, which means that entire homes or apartments are more desirable. Although price is a concern and entire homes or apartments are more expensive, they provide more privacy and space for the guests. If the guests are traveling in groups, that makes this option more affordable, which may explain why it's positive. 
