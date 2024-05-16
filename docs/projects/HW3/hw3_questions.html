@@ -9,7 +9,7 @@
 <meta name="author" content="Nicholas Shuckerow">
 <meta name="dcterms.date" content="2024-05-15">
 
-<title>Nick_Shuckerow - Poisson Regression Examples</title>
+<title>Nick_Shuckerow - Poisson</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -177,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Poisson Regression Examples</h1>
+<h1 class="title">Poisson</h1>
 </div>
 
 
@@ -232,7 +232,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="yogurt-dataset">Yogurt Dataset</h3>
 <p>We will use the <code>yogurt_data</code> dataset, which provides anonymized consumer identifiers (<code>id</code>), a vector indicating the chosen product (<code>y1</code>:<code>y4</code>), a vector indicating if any products were “featured” in the store as a form of advertising (<code>f1</code>:<code>f4</code>), and the products’ prices (<code>p1</code>:<code>p4</code>). For example, consumer 1 purchased yogurt 4 at a price of 0.079/oz and none of the yogurts were featured/advertised at the time of consumer 1’s purchase. Consumers 2 through 7 each bought yogurt 2, etc.</p>
 <p>First, we will import the dataset and take a look at it in a dataframe format.</p>
-<div id="979cd556" class="cell" data-execution_count="1">
+<div id="bf423d90" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>yogurt <span class="op">=</span> pd.read_csv(<span class="st">'yogurt_data.csv'</span>)</span>
@@ -349,13 +349,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Next, we’ll get more info on the data to describe it.</p>
-<div id="b37cb438" class="cell" data-execution_count="2">
+<div id="048e32f0" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>yogurt.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>(2430, 13)</code></pre>
 </div>
 </div>
-<div id="b408c3b0" class="cell" data-execution_count="3">
+<div id="93e681dc" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yogurt.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -380,7 +380,7 @@ dtypes: float64(4), int64(9)
 memory usage: 246.9 KB</code></pre>
 </div>
 </div>
-<div id="6f1df93d" class="cell" data-execution_count="4">
+<div id="db5709ab" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>yogurt.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div>
@@ -547,7 +547,7 @@ memory usage: 246.9 KB</code></pre>
 <p><span class="math display">\[ x_j' = [\mathbbm{1}(\text{Yogurt 1}), \mathbbm{1}(\text{Yogurt 2}), \mathbbm{1}(\text{Yogurt 3}), X_f, X_p] \]</span></p>
 <p>The “hard part” of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate <span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>).</p>
 <p>What we would like to do is reorganize the data from a “wide” shape with <span class="math inline">\(n\)</span> rows and multiple columns for each covariate, to a “long” shape with <span class="math inline">\(n \times J\)</span> rows and a single column for each covariate. As part of this re-organization, we’ll add binary variables to indicate the first 3 products; the variables for featured and price are included in the dataset and simply need to be “pivoted” or “melted” from wide to long.</p>
-<div id="15609607" class="cell" data-execution_count="5">
+<div id="351781c3" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Melting data to be in long format</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>long_data <span class="op">=</span> yogurt.melt(id_vars<span class="op">=</span><span class="st">'id'</span>, </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                             value_vars<span class="op">=</span>[<span class="st">'y1'</span>, <span class="st">'y2'</span>, <span class="st">'y3'</span>, <span class="st">'y4'</span>, <span class="st">'f1'</span>, <span class="st">'f2'</span>, <span class="st">'f3'</span>, <span class="st">'f4'</span>, <span class="st">'p1'</span>, <span class="st">'p2'</span>, <span class="st">'p3'</span>, <span class="st">'p4'</span>],</span>
@@ -573,7 +573,7 @@ memory usage: 246.9 KB</code></pre>
 <section id="estimation" class="level3">
 <h3 class="anchored" data-anchor-id="estimation">Estimation</h3>
 <p>Below, I’ve created a custom function to calculate the log likelihood of a logistic regression. It returns the negative log likelihood in order to minimze the negative (same as maxmimizing if positive). Restrictions with python functions only allow us to minimize.</p>
-<div id="2b1917b6" class="cell" data-execution_count="6">
+<div id="6f229e79" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -590,7 +590,7 @@ memory usage: 246.9 KB</code></pre>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>log_likelihood</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we will optimize our function to find the maximum likelihood estimators for the betas or coefficients of each explanatory variable. First, the variables are scaled, then we add a constant variable and a array of zeros for initial beta estimates.</p>
-<div id="668d958e" class="cell" data-execution_count="7">
+<div id="78b63172" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize features</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>features_scaled <span class="op">=</span> scaler.fit_transform(long_data[[<span class="st">'featured'</span>, <span class="st">'price'</span>, <span class="st">'yogurt_1'</span>, <span class="st">'yogurt_2'</span>, <span class="st">'yogurt_3'</span>]])</span>
@@ -624,7 +624,7 @@ memory usage: 246.9 KB</code></pre>
      njev: 28</code></pre>
 </div>
 </div>
-<div id="a3565340" class="cell" data-execution_count="8">
+<div id="c786aae8" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>coefficients <span class="op">=</span> result_logistic.x</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -639,7 +639,7 @@ memory usage: 246.9 KB</code></pre>
 <p>We learn…</p>
 <p>The most preferred yogurt is Yogurt #1, which has a coefficient or beta of 0.614. The next highest is Yogurt #2, which has a coefficient of 0.390. Yogurt #4 which is not featured is the base case, so it has a coefficient of 0. The least preferred yogurt is Yogurt #3, which has a coefficient of -1.360.</p>
 <p>For an example of how much more profitable one yogurt is over the other based on our model, we’ll calculate the dollar benefit of yogurt 1 (most preferred) over yogurt 3 (least preferred). We’ll do this by finding the difference in betas between the two, then dividing by the price coefficient.</p>
-<div id="6ebaae33" class="cell" data-execution_count="9">
+<div id="5e106ac0" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dollar_benefit <span class="op">=</span> (coefficients[<span class="dv">3</span>] <span class="op">-</span> coefficients[<span class="dv">5</span>]) <span class="op">/</span><span class="bu">abs</span>(coefficients[<span class="dv">2</span>])</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>dollar_benefit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -651,7 +651,7 @@ memory usage: 246.9 KB</code></pre>
 <p>One benefit of the MNL model is that we can simulate counterfactuals (eg, what if the price of yogurt 1 was $0.10/oz instead of $0.08/oz).</p>
 <p>Now, lets see how increasing the price of yogurt 1 to $0.10/oz vice $0.08/oz affects its market share.</p>
 <p>First we’ll calculate the current market share of each yogurt.</p>
-<div id="0003e28c" class="cell" data-execution_count="10">
+<div id="5e3535be" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> yogurt[<span class="st">'y1'</span>].<span class="bu">sum</span>()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> yogurt[<span class="st">'y2'</span>].<span class="bu">sum</span>()</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>y3 <span class="op">=</span> yogurt[<span class="st">'y3'</span>].<span class="bu">sum</span>()</span>
@@ -671,12 +671,12 @@ memory usage: 246.9 KB</code></pre>
 </div>
 </div>
 <p>Yogurt 1 is at 34% market share. Now lets see if our logistic regression model can calculate the same.</p>
-<div id="67ef418a" class="cell" data-execution_count="11">
+<div id="f24f438c" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># consolidate columns y1 to y4 into a single column</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>yogurt[<span class="st">'yogurt_type'</span>] <span class="op">=</span> yogurt[[<span class="st">'y1'</span>, <span class="st">'y2'</span>, <span class="st">'y3'</span>, <span class="st">'y4'</span>]].idxmax(axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">str</span>[<span class="dv">1</span>].astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="130741f9" class="cell" data-execution_count="12">
+<div id="737b47ee" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -702,7 +702,7 @@ memory usage: 246.9 KB</code></pre>
 </div>
 </div>
 <p>Our initial market shares calculated above match the logistic regression model’s calculation. Lets see how it predicts market shares will change when increasing yogurt 1’s price per ounce.</p>
-<div id="c8cc40e2" class="cell" data-execution_count="13">
+<div id="26549bdb" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>yogurt[<span class="st">'p1_new'</span>] <span class="op">=</span> yogurt[<span class="st">'p1'</span>] <span class="op">+</span> <span class="fl">0.10</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> yogurt[[<span class="st">'f1'</span>, <span class="st">'f2'</span>, <span class="st">'f3'</span>, <span class="st">'f4'</span>, <span class="st">'p1_new'</span>, <span class="st">'p2'</span>, <span class="st">'p3'</span>, <span class="st">'p4'</span>]].values</span>
@@ -729,7 +729,7 @@ New Market Shares After Price Increase: [0.19483994 0.50127048 0.02768742 0.2762
 <p>Next, we’ll take a look at a different dataset which we’ll conduct a conjoint analysis on. The dataset is for preference of features in minivans.</p>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
-<div id="1ff9de66" class="cell" data-execution_count="14">
+<div id="03ffaca3" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>conjoint <span class="op">=</span> pd.read_csv(<span class="st">'conjoint.csv'</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>conjoint.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -819,21 +819,21 @@ New Market Shares After Price Increase: [0.19483994 0.50127048 0.02768742 0.2762
 </div>
 </div>
 </div>
-<div id="3f6d4acb" class="cell" data-execution_count="15">
+<div id="da4de49d" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of unique respondents</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>conjoint[<span class="st">'resp.id'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>200</code></pre>
 </div>
 </div>
-<div id="6936cc43" class="cell" data-execution_count="16">
+<div id="4799a1d5" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of choice tasks</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>conjoint[conjoint[<span class="st">'resp.id'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'ques'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>15</code></pre>
 </div>
 </div>
-<div id="a7156a16" class="cell" data-execution_count="17">
+<div id="f9e0336b" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of alternatives</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>conjoint[<span class="st">'alt'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
@@ -846,7 +846,7 @@ New Market Shares After Price Increase: [0.19483994 0.50127048 0.02768742 0.2762
 <section id="model" class="level3">
 <h3 class="anchored" data-anchor-id="model">Model</h3>
 <p>Lets estimate a Multinomial Logistic model to see what features were most preferred.</p>
-<div id="ccd159b7" class="cell" data-execution_count="18">
+<div id="92e6ce6c" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting non-numeric columns to boolean</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>conjoint <span class="op">=</span> pd.get_dummies(conjoint, columns<span class="op">=</span>[<span class="st">'seat'</span>, <span class="st">'cargo'</span>, <span class="st">'eng'</span>], drop_first<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -875,7 +875,7 @@ New Market Shares After Price Increase: [0.19483994 0.50127048 0.02768742 0.2762
 <p>For cargo space, 3 ft is a positive coefficient, meaning its the most preferred.</p>
 <p>Finally, for engine type, both electric and hybrid have negative coefficients, meaning that gas is the most preferred.</p>
 <p>Lets see how 3ft of crago space compares to 2ft of argo space in terms of dollar benefit.</p>
-<div id="9d59660a" class="cell" data-execution_count="19">
+<div id="fbd03583" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>cargo_3ft <span class="op">=</span> model.coef_[<span class="dv">0</span>][<span class="dv">3</span>]</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>price <span class="op">=</span> model.coef_[<span class="dv">0</span>][<span class="dv">0</span>]</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -944,7 +944,7 @@ New Market Shares After Price Increase: [0.19483994 0.50127048 0.02768742 0.2762
 </tbody>
 </table>
 <p>First, we’ll create the dataset in python and make it a DataFrame.</p>
-<div id="0af79647" class="cell" data-execution_count="20">
+<div id="099d62ac" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"minivan"</span>: [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'D'</span>, <span class="st">'E'</span>, <span class="st">'F'</span>],</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"seat"</span>: [<span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">7</span>],</span>
@@ -1028,7 +1028,7 @@ New Market Shares After Price Increase: [0.19483994 0.50127048 0.02768742 0.2762
 </div>
 </div>
 <p>Next, we’ll shape the data as we did in previous models.</p>
-<div id="9186acbe" class="cell" data-execution_count="21">
+<div id="c2988a4a" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>minivans <span class="op">=</span> pd.get_dummies(minivans, columns<span class="op">=</span>[<span class="st">'seat'</span>, <span class="st">'cargo'</span>, <span class="st">'eng'</span>], drop_first<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>minivans.drop([<span class="st">'seat_6'</span>, <span class="st">'cargo_2'</span>, <span class="st">'eng_gas'</span>], axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
@@ -1047,7 +1047,7 @@ New Market Shares After Price Increase: [0.19483994 0.50127048 0.02768742 0.2762
        0.21073102])</code></pre>
 </div>
 </div>
-<div id="7764fb3f" class="cell" data-execution_count="22">
+<div id="36f44b1f" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add predictions to the minivans dataframe</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'predictions'</span>] <span class="op">=</span> predictions</span>

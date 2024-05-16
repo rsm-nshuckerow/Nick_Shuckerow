@@ -1,5 +1,5 @@
 ---
-title: "Poisson Regression Examples"
+title: "Poissonnew2"
 author: "Nicholas Shuckerow"
 date: today
 callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
