@@ -1,0 +1,312 @@
+---
+title: "Key Drivers Analysis"
+author: "Nicholas Shuckerow"
+date: today
+---
+
+
+This post implements a few measure of variable importance, interpreted as a key drivers analysis, for certain aspects of a payment card on customer satisfaction with that payment card.
+
+
+_todo: replicate the table on slide 19 of the session 4 slides. This involves calculating pearson correlations, standardized regression coefficients, "usefulness", Shapley values for a linear regression, Johnson's relative weights, and the mean decrease in the gini coefficient from a random forest. You may use packages built into R or Python._
+
+_If you want a challenge, either (1) implement one or more of the measures yourself. "Usefulness" is rather easy to program up. Shapley values for linear regression are a bit more work. Or (2) add additional measures to the table such as the importance scores from XGBoost._
+
+
+# 1. Dataset Research
+
+Before we go into any complex analysis, we first want to get familar with the data.
+
+```{python}
+import pandas as pd
+
+data = pd.read_csv('data_for_drivers_analysis.csv')
+
+data.head()
+```
+
+```{python}
+print(f'The number of rows in the dataset are {data.shape[0]}.')
+print(f'The number of unique IDs in the dataset are {data.id.nunique()}.')
+print(f'The number of unique brands in the dataset are {data.brand.nunique()}.')
+```
+
+```{python}
+data.describe()
+```
+
+After looking at our data, we can see that satisfaction is the dependent variable, which is scored based on a range of 1-5. There are numerous different categories which affect the satisfaction score. All those categories are binary based on what the customer thinks about that card brand.
+
+Now we're ready to get into some deeper analysis
+
+# 2. Pearson Correlations
+
+The analysis we'll conduct is determining the Pearson Correlations for this dataset. That is, how each indepenent variable is correlated to satisfaction.
+
+We'll be using the corr function in python to determine our correlations in respect to satisfaction.
+
+```{python}
+# Calculate pearson correlations with satisfaction being the y variable and the rest being the x variables
+
+satisfaction = data.drop(['id', 'brand'], axis=1)
+
+table = satisfaction.corr()['satisfaction'].sort_values(ascending=False)
+
+# drop satisfaction from table
+
+table = table.drop('satisfaction')
+
+table = pd.DataFrame(table)
+
+table = table.rename(columns={'satisfaction': 'Pearson_Corr'})
+
+table['Pearson_Corr_%'] = round(table['Pearson_Corr']/table['Pearson_Corr'].sum(), 3)*100
+
+table = table.drop('Pearson_Corr', axis = 1)
+table
+```
+
+From our calculations, we see that trust has the highest correlation to satisfaction, followed by impact and service. Popularity seems to be least correlated with satisfaction. This does not mean that trust is the most important variable when looking at satisfaction, however. It simply means it follows the most similar path (up or down) as satisfaction with respect to all the other variables.
+
+
+# 3. Polychoric Correlations
+
+Polychoric correlations are most notably used for ordinal variables, or variables that have a specific rank order, for instance military ranks (Captain, Colonel, General, etc).
+
+Our satisfaction variable is an ordinal variable which ranges from 1-5.
+
+For this calculation, we used an R package within python. R has a much simpler package for conducting these calculations.
+
+```{python}
+import rpy2.robjects as robjects
+from rpy2.robjects import pandas2ri
+
+# Activate the pandas2ri conversion
+pandas2ri.activate()
+
+
+# Specify the columns of interest
+columns_of_interest = ['trust', 'build', 'differs', 'easy', 'appealing', 'rewarding', 'popular', 'service', 'impact']
+
+# Initialize a list to store the results
+correlation = []
+
+# Define the R code for calculating polychoric correlation
+r_code = """
+library(polycor)
+polychoric_corr <- function(x, y) {
+    result <- polychor(x, y)
+    return(result)
+}
+"""
+
+# Load the R code into the R environment
+robjects.r(r_code)
+
+# Get the polychoric_corr function
+polychoric_corr = robjects.globalenv['polychoric_corr']
+
+# Calculate polychoric correlations between 'satisfaction' and each specified column
+for col in columns_of_interest:
+    r_corr = polychoric_corr(data['satisfaction'], data[col])
+    correlation.append(r_corr[0])
+
+# Convert correlations to a pandas DataFrame
+correlation_df = pd.DataFrame({
+    'Variable': columns_of_interest,
+    'Polychoric_Corr': correlation
+})
+
+# Calculate the sum of the polychoric correlations
+sum_polychoric_correlations = correlation_df['Polychoric_Corr'].sum()
+
+# Calculate the percentage of each polychoric correlation
+correlation_df['Polychoric_Corr_%'] = (correlation_df['Polychoric_Corr'] / sum_polychoric_correlations).round(3)*100
+```
+
+```{python}
+# make variable column the index
+
+correlation_df.set_index('Variable', inplace=True)
+
+# merge correlation_df with correlations
+
+table = table.merge(correlation_df, left_index=True, right_index=True).drop('Polychoric_Corr', axis=1)
+
+
+table
+```
+
+As we can see from the data, the groups are very similar to Pearson's Correlations, however they are in slightly different orders. The top three correlated variables from Pearson's (Trust, Impact, Service) are still the top 3, however the order is Impact, Service, and Trust. 
+
+Also, in our bottom 3 variables (Build, Differs, and Popular) from Pearson's, Polychoric varies slightly with Differs, Build and Popular being the order from most to least. Overall, both Pearson's and Polychoric correlations are very similar. 
+
+# 4. Standardized Multiple Regression Coefficients
+
+Standardized regression coefficients are used for a different purpose than our last two methods. Pearson's and Polychoric used correlations, which do not necessarily relate to importance of each variable on the dependent variable. Standardized regression coefficients measure importance for each variable in a regression analysis by scaling all the independent variables so they are now all on equal scales. The scaled indepenent variables are then fit to a regression model where their betas or standardized coefficients are generated. 
+
+First, we'll scale and fit our data to get our coefficients, then find their importance.
+
+```{python}
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+
+# Initialize the StandardScaler
+
+scaler = StandardScaler()
+
+# Fit the scaler to the data
+
+scaler.fit(data.drop(['id', 'brand', 'satisfaction'], axis=1))
+
+# Transform the data
+
+scaled_data = scaler.transform(data.drop(['id', 'brand', 'satisfaction'], axis=1))
+
+# Convert the scaled data to a DataFrame
+
+scaled_data = pd.DataFrame(scaled_data, columns=data.drop(['id', 'brand', 'satisfaction'], axis=1).columns)
+
+# Add the 'satisfaction' column to the scaled data
+
+scaled_data['satisfaction'] = data['satisfaction']
+
+# Initialize the LinearRegression model
+
+model = LinearRegression()
+
+# Fit the model to the scaled data
+
+model.fit(scaled_data.drop('satisfaction', axis=1), scaled_data['satisfaction'])
+
+coefficients = model.coef_
+
+table['Std_Coefficients'] = coefficients
+
+table['Std_Coef_%'] = (table['Std_Coefficients']/table['Std_Coefficients'].sum())*100
+
+table = table.drop('Std_Coefficients', axis=1)
+
+table
+```
+
+The ranked order for importance based on Standardized Regression Coefficients changes greatly when compared to our correlations. Popularity, which had the lowest correlational values for the first two calculations, now has the highest value. Trust is still at the top in second place, but Differs is now in the top 3 as well. Impact is also towards the bottom of the pack which was towards the top in correlations. 
+
+
+# 5. Shapley Values for Linear Regression
+
+Shapley Values, like the Standardized Regression Coefficients, also measure importance, but using a different method. They have been popularized in the use of machine learning, but here we will be using them with linear regression. Shapley values measure importance through the R^2 value, which measures how well the variance in the data is explained by the coefficients generated during a linear regression analysis. 
+
+Once the coefficients are attained through the regression analysis, they are then used to create as many unique combinations of dependent variables in our linear regression analysis. To go into this further, if our regression had 3 explanatory variables labeled a, b, and c, each one would have a coefficient. We would then measure the R2 value for every combination of variables to explain y. 
+
+For example, one combination would be y = beta-a*a + beat-b*b + beta-c*c. Another combination would be y = beta-a*a + beta-b*b. Another one would be y = beta-a*a. We would calculate the R2 values for both of these models. We would subtract the R2 value from of the equation with variable c from the R2 value from the equaion without c to get the difference. We would do this for every combination of variable, then average the differences in R2 for every variable which we got. 
+
+Lets get into the code for calculating Shapley values in python. 
+
+First, we'll make the linear regression model.
+
+```{python}
+from sklearn.ensemble import RandomForestRegressor
+
+# Load dataset
+
+X = data[columns_of_interest]
+y = data['satisfaction']
+
+# Train a model
+model = LinearRegression()
+model.fit(X, y)
+
+```
+
+Next, we'll generate the Shapley Values using the SHAP package on python
+
+```{python}
+import shap
+
+# Initialize SHAP explainer
+explainer = shap.LinearExplainer(model, X)
+
+# Calculate Shapley values
+shap_values = explainer.shap_values(X)
+
+# Plot the summary
+shap.summary_plot(shap_values, X, plot_type="bar")
+```
+
+Finally, we'll put our Shapley Values into our table.
+
+```{python}
+shap_values = pd.DataFrame(shap_values, columns=columns_of_interest)
+
+# mean of absolute values of each column
+
+shap_values_avg = shap_values.abs().mean()
+
+shap_values_avg = pd.DataFrame(shap_values_avg)
+
+shap_values_avg = shap_values_avg.rename(columns={0: 'Shapley_Value'})
+
+table = table.merge(shap_values_avg, left_index=True, right_index=True)
+
+table['Shapley_Value_%'] = round(table['Shapley_Value'] / table['Shapley_Value'].sum(), 3)*100
+
+table = table.drop('Shapley_Value', axis=1)
+
+table
+```
+
+The Shapley Values produced a slightly different order than our standard coefficients. Trust, impact, and service are the top 3 most important features. The remaiining order is much different than previous calculations, with appealing, differs, and easy the following 3, and build, popular, and rewarding following them.
+
+
+# 6. Johnson's Epsilon
+
+```{python}
+from relativeImp import relativeImp
+
+
+y = 'satisfaction'
+X = ['trust', 'build', 'differs', 'easy', 'appealing', 'rewarding', 'popular', 'service', 'impact']
+
+# Perform relative weights analysis
+rel_Imp = relativeImp(data, outcomeName=y, driverNames=X)
+
+rel_Imp.set_index('driver', inplace=True)
+
+table = table.merge(rel_Imp, left_index=True, right_index=True)
+
+table = table.drop('rawRelaImpt', axis=1)
+
+table = table.rename(columns = {'normRelaImpt':'Johnson_Ep_%'})
+
+table
+```
+
+
+# 7. Mean Decrease in RF Gini Coefficient
+
+```{python}
+from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(data[columns_of_interest], data['satisfaction'])
+
+gini_importance = model.feature_importances_
+
+# Create a DataFrame for better readability
+feature_importance_df = pd.DataFrame({
+    'Feature': columns_of_interest,
+    'Gini Importance': gini_importance
+})
+
+# Sort the features by importance
+feature_importance_df = feature_importance_df.sort_values(by='Gini Importance', ascending=False)
+
+feature_importance_df.set_index('Feature', inplace = True)
+
+feature_importance_df['Gini Importance'] = feature_importance_df['Gini Importance']*100
+
+table = table.merge(feature_importance_df, left_index=True, right_index=True)
+
+table
+```

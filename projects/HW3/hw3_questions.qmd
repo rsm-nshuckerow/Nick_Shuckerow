@@ -1,5 +1,5 @@
 ---
-title: "Poissonnew2"
+title: "Poisson"
 author: "Nicholas Shuckerow"
 date: today
 callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
