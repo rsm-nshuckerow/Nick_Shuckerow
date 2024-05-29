@@ -8,11 +8,6 @@ date: today
 This post implements a few measure of variable importance, interpreted as a key drivers analysis, for certain aspects of a payment card on customer satisfaction with that payment card.
 
 
-_todo: replicate the table on slide 19 of the session 4 slides. This involves calculating pearson correlations, standardized regression coefficients, "usefulness", Shapley values for a linear regression, Johnson's relative weights, and the mean decrease in the gini coefficient from a random forest. You may use packages built into R or Python._
-
-_If you want a challenge, either (1) implement one or more of the measures yourself. "Usefulness" is rather easy to program up. Shapley values for linear regression are a bit more work. Or (2) add additional measures to the table such as the importance scores from XGBoost._
-
-
 # 1. Dataset Research
 
 Before we go into any complex analysis, we first want to get familar with the data.
@@ -261,6 +256,10 @@ The Shapley Values produced a slightly different order than our standard coeffic
 
 # 6. Johnson's Epsilon
 
+Johnson's Epsilon, also known as relative weight analysis, is an approximation of the Shapley Values which uses a different calculation approach. It uses Eigenvectors and Eigenvalues to create a set of uncorrelated independent variables which can be used to calculate the partial effect of each independent variable. 
+
+The code is relatively simple in python using the relativeImp function as seen below.
+
 ```{python}
 from relativeImp import relativeImp
 
@@ -282,8 +281,12 @@ table = table.rename(columns = {'normRelaImpt':'Johnson_Ep_%'})
 table
 ```
 
+From our results, we can see that ranked order is similar with the top, middle, and bottom 3 variables remaining the same, but values are different. 
 
 # 7. Mean Decrease in RF Gini Coefficient
+
+The mean decrease in Gini coefficient also measures importance, but for Random Forests and Decision trees. It does so by measuring the impurity before and after a split in the decision tree. If the split performs well, the decrease in impurity will be higher. 
+
 
 ```{python}
 from sklearn.ensemble import RandomForestClassifier
@@ -310,3 +313,8 @@ table = table.merge(feature_importance_df, left_index=True, right_index=True)
 
 table
 ```
+
+The Gini Coefficient showed much different results than any of our other previous calculations. Trust and impact are now at the bottom of the pack, while popularity, build, and rewarding are at the top.
+
+
+From all the above calculations, we can see that there are numerous ways to measure correlation, usefulness, and importance for dependent variables in a model, dependent the type of model we are looking at. They can all be useful and worthwhile depending on the specific models and information which the customer and/or data analyst ar seeking. 
