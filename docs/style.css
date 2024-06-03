@@ -1,0 +1,5 @@
+/* Left align numbered list items */
+ol {
+    list-style-position: inside;
+  }
+  

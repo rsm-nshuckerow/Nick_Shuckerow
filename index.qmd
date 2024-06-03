@@ -9,9 +9,29 @@ about:
     - icon: linkedin
       href: https://www.linkedin.com/in/nick-shuckerow-4230b182/
     - href: resume.qmd
-      text: Resumee
+      text: Resume
+
+format:
+  html:
+    css: style.css
 ---
 
-Welcome to my website!
+Welcome to my Data Analytics Website! 
 
-I am a Systems Engineer for Raytheon
+I hope like me, you are also a data analytics enthusiast, which I never thought I put those words in sequential order like before.
+
+ I originally found interest in data analytics while a Marine Corps Officer, training the next generation of Marines in San Diego. We noticed a trend that the improvement in physical fitness scores throughout recruit training depended on three main concepts:
+
+1. Individual Will
+2. Drill Instructor Influence
+3. Group Fitness Levels
+
+![Marine Corps Physical Fitness Test](Files/MCRD_PFT.jpg)
+
+ It's difficult to quantify the first two, so we focused on the last one. I also had no concept of hypothesis tests, p-values, or experiment/pilot testing, so we concluded at the time that improvement in physical fitness levels was affected by the platoon's overall physical fitness level. Meaning if Platoon A had an average physical fitness score of 250 at the start of recruit training and Platoon B had an average score of 230, then a recruit will improve more (especially if they're at the left tail of the bell curve) in Platoon A than Platoon B. 
+
+ We designed an excel formula to appropriately score and bin all recruits being sent to our Company, then used Goal Seek to arrange the recruits in groups where each Platoon had nearly identical physical fitness scores. 
+
+The other Marines which were taking part in this "experiment" and I came to ask ourselves how we would definitively say that this would improve overall fitness scores. Now I know we should have asked, does group fitness levels influence individual fitness levels? If so, what is the level of influence?
+
+That got me thinking about a career in data analytics, which here I am today.
