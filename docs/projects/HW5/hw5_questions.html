@@ -249,7 +249,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Initialization of Centroids</h1>
 <p>The first step of k-means is choosing how many clusters or groups we want to have. One may ask, “Shouldn’t we have an idea of how many groups we want to have?”. This is true, and is why k-means is usually used to see if we can identify any further groups which we did not know existed.</p>
 <p>Lets take our Iris dataset:</p>
-<div id="acfa9745" class="cell" data-execution_count="1">
+<div id="02e7f947" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -318,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>The features are the column names and the groups we are trying to divide them into are their species (setosa, versicolor, and virginica). These species are not listed but they are known, as that is the purpose of k-means in this context; discovering if k-means function can group them into their proper species.</p>
-<div id="e11a49eb" class="cell" data-execution_count="2">
+<div id="d5eb1aa2" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> initialize_centroids(X, k):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Randomly initialize k centroids from the dataset X.</span></span>
@@ -335,7 +335,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>First, we decide how many groups (k) we want to divide our dataset into for segmentation. We will choose 3 groups (although we know there are three species, we can still see if k-means groups them properly). The number of groups is represented by k.</p>
 <p>We then randomly choose 3 data points or rows in the dataset to be our centroid. We do this by randomly choosing 3 indices, and indexing those indices into the dataset to create our centroid variable. The centroid variable now has 3 rows of data.</p>
 <p>Since a plot is only 2D, we’ll give show an example using just sepal length and sepal width of the locations of the randomly assigned centroids. we’ll use k=2 for the exmaple.</p>
-<div id="b47f5a95" class="cell" data-execution_count="3">
+<div id="b5becdde" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize centroid</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>init_cent <span class="op">=</span> initialize_centroids(X[:,[<span class="dv">0</span>,<span class="dv">1</span>]], k<span class="op">=</span><span class="dv">2</span>)[:,[<span class="dv">0</span>,<span class="dv">1</span>]]</span>
@@ -368,7 +368,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The formula for Euclidian distance is:</p>
 <p>The subscripts go to 4 because w ehave 4 variables. It will always be how many features you are analyzing for your k-means.</p>
 <p>Now, we’ll translate this formula into a function for python:</p>
-<div id="95f28154" class="cell" data-execution_count="4">
+<div id="fa562ca7" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_distances(X, centroids):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Compute the distance from each point in X to each centroid.</span></span>
@@ -382,7 +382,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The code above is initially creating an array of zeros with the number of data points from our dataset as rows and the number of centroids as our columns. This is because for each row of data, we are calculating the distance to each of the randomly selected centroids.</p>
 <p>We then calculate the euclidian distance from each data point to each centroid using the np.linalg.norm function.</p>
 <p>Now using our example from before with just sepal length and width, we get the following array. We’ll show the plot with the distances to each centroid for the first data point in our iris dataset.</p>
-<div id="edda1b54" class="cell" data-execution_count="5">
+<div id="2bb45c08" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>comp_dist <span class="op">=</span> compute_distances(X[:,[<span class="dv">0</span>,<span class="dv">1</span>]], init_cent)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(init_cent[:, <span class="dv">0</span>], init_cent[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">100</span>, c<span class="op">=</span><span class="st">'red'</span>)</span>
@@ -408,7 +408,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Assigning data points to Clusters</h1>
 <p>Now that we have the distances for each data point to each centroid, we will assign the each data points to the cluster based on the respective distance from that data point to the centroid. The centroid which has the lowest distance for each data point will result in the data point being assigned to that cluster.</p>
 <p>We’ll use the np.argmin function to find the index or column number which has the shortest distance for each data point.</p>
-<div id="91c63cf3" class="cell" data-execution_count="6">
+<div id="5880bb13" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> assign_clusters(distances):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Assign each point to the nearest centroid.</span></span>
@@ -416,7 +416,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.argmin(distances, axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here is a brief look at our table of distances to each centroid/data point:</p>
-<div id="1fe4920d" class="cell" data-execution_count="7">
+<div id="dc1dc4a4" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>comp_dist <span class="op">=</span> pd.DataFrame(comp_dist, columns<span class="op">=</span>[<span class="st">'centroid_1'</span>, <span class="st">'centroid_2'</span>])</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>comp_dist.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -465,7 +465,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now, here’s a plot with the clusters assigned.</p>
-<div id="a9391a2e" class="cell" data-execution_count="8">
+<div id="a26c33bc" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="op">=</span> assign_clusters(comp_dist)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[:, <span class="dv">0</span>], X[:, <span class="dv">1</span>], c<span class="op">=</span>cluster)</span>
@@ -487,7 +487,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Updating Centroids</h1>
 <p>Now we will update the centroid locations to be more representative of the clusters that have been assigned to them. We do this by finding the mean value for each feature for every data point in that cluster.</p>
 <p>Below is code used to update the centroids. We take our distances table and our cluster array to create a new array which has the mean values for sepal length and width for each cluster.</p>
-<div id="ea6fdd86" class="cell" data-execution_count="9">
+<div id="60f9a523" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_centroids(X, labels, k):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Update the centroids by calculating the mean of the points assigned to each centroid.</span></span>
@@ -498,7 +498,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> new_centroids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Lets see the new centroid locations for each cluster:</p>
-<div id="302bbc94" class="cell" data-execution_count="10">
+<div id="9a64f6f7" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[:, <span class="dv">0</span>], X[:, <span class="dv">1</span>], c<span class="op">=</span>cluster)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(update_centroids(X[:,[<span class="dv">0</span>,<span class="dv">1</span>]], cluster, k<span class="op">=</span><span class="dv">2</span>)[:, <span class="dv">0</span>], update_centroids(X[:,[<span class="dv">0</span>,<span class="dv">1</span>]], cluster, k<span class="op">=</span><span class="dv">2</span>)[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">100</span>, c<span class="op">=</span><span class="st">'red'</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(iris.feature_names[<span class="dv">0</span>])</span>
@@ -519,7 +519,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Now that we have each individual part of k-means, we need to put it all together so we iterate over our functions until we believe we’ve met the desired end state.</p>
 <p>The desired end-state is usually set by either max iterations of our function running, or a tolerance to meet in respect to the previous centroid locations and the updated centroid locations. Once that tolerance is low enough between the updated and old values, we say the function is done running and we’ve found k-means.</p>
 <p>Below is our code when we put it all together:</p>
-<div id="7f2b085e" class="cell" data-execution_count="11">
+<div id="2e8ba368" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> k_means(X, k, max_iters<span class="op">=</span><span class="dv">100</span>, tol<span class="op">=</span><span class="fl">1e-4</span>):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">    The main function to run the k-means algorithm.</span></span>
@@ -547,7 +547,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Calculating K-means for the Iris Dataset</h1>
 <p>That we have our whole function for k-means, we’ll use all the variables in the iris dataset rather than just two which was done for data visualization purposes, and we’ll compare our results to the built-in k-means function in the scikit package.</p>
 <p>We’ll still only display our results in a 2D format. Here are our results for k-means of the iris dataset.</p>
-<div id="526e5ff2" class="cell" data-execution_count="12">
+<div id="b66e0e86" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>centroids, labels <span class="op">=</span> k_means(X, k<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[labels <span class="op">==</span> <span class="dv">0</span>, <span class="dv">0</span>], X[labels <span class="op">==</span> <span class="dv">0</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'red'</span>, label<span class="op">=</span><span class="st">'Cluster 1'</span>)</span>
@@ -568,7 +568,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now lets compare to the scikit built-in function:</p>
-<div id="fb311912" class="cell" data-execution_count="13">
+<div id="56bc1e9f" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">42</span>).fit(X)</span>
@@ -583,7 +583,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 </code></pre>
 </div>
 </div>
-<div id="21d56e67" class="cell" data-execution_count="14">
+<div id="cf8e86f1" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[kmeans_labels <span class="op">==</span> <span class="dv">0</span>, <span class="dv">0</span>], X[kmeans_labels <span class="op">==</span> <span class="dv">0</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'red'</span>, label<span class="op">=</span><span class="st">'Cluster 1'</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[kmeans_labels <span class="op">==</span> <span class="dv">1</span>, <span class="dv">0</span>], X[kmeans_labels <span class="op">==</span> <span class="dv">1</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Cluster 2'</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[kmeans_labels <span class="op">==</span> <span class="dv">2</span>, <span class="dv">0</span>], X[kmeans_labels <span class="op">==</span> <span class="dv">2</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'green'</span>, label<span class="op">=</span><span class="st">'Cluster 3'</span>)</span>
@@ -602,7 +602,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 </div>
 </div>
 <p>As you can see, our plots are nearly identical. But the real test is seeing if our centroids and labels we’re calculated similarily to the scikit k-means function.</p>
-<div id="c2c1b867" class="cell" data-execution_count="15">
+<div id="778b3b2b" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>compare_centroids <span class="op">=</span> np.allclose(k_means(X, k<span class="op">=</span><span class="dv">3</span>)[<span class="dv">0</span>], kmeans.cluster_centers_)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Self-made function centroids are within tolerance to built-in function centroids: </span><span class="sc">{</span>compare_centroids<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -610,7 +610,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 <pre><code>Self-made function centroids are within tolerance to built-in function centroids: True</code></pre>
 </div>
 </div>
-<div id="f96d1f87" class="cell" data-execution_count="16">
+<div id="2b891a09" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>compare_labels <span class="op">=</span> np.allclose(k_means(X, k<span class="op">=</span><span class="dv">3</span>)[<span class="dv">1</span>], kmeans.labels_)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Self-made function cluster labels are within tolerance to built-in function cluster labels: </span><span class="sc">{</span>compare_labels<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
