@@ -2,6 +2,7 @@
 title: "Segmentation Methods"
 author: "Nicholas Shuckerow"
 date: today
+format: html
 ---
 
 
@@ -21,7 +22,7 @@ _todo: Use the Yogurt dataset from HW3 to estimate a latent-class MNL model.  Th
 _todo: Fit the latent-class MNL model with 2, 3, ..., K classes. How many classes are suggested by the BIC?  The Bayesian-Schwarz Information Criterion [link](https://en.wikipedia.org/wiki/Bayesian_information_criterion) is a metric that assess the benefit of a better log likelihood at the expense of additional parameters to estimate -- akin to the adjusted R-squared for the linear regression model. Note, however, that a lower BIC indicates a better model fit, accounting for the number of parameters in the model._
 
 
-
+# Background
 
 Today, we will be conducting Segmentation Analysis using the K-Means method. Segmentation analysis is used heavily in marketing, where it helps select a target market for a given product. Segmentation is crucial in marketing in order to properly identify the customer groups you are targeting.
 
@@ -38,7 +39,7 @@ Lets say we have an individual with the below traits:
 
 One person who may come to mind that fits these traits is Prince Charles. 
 
-![Prince Charles, Prince of Wales](Files/prince_charles.jpg)
+<img src="Files/prince_charles.jpg" alt="Prince Charles, Prince of Wales" style="width:50%; margin-top: 10px;">
 
 Now, lets look at someone else who matches these traits. That person is.....
 
@@ -54,11 +55,13 @@ K-means is an iterative method of assigning each data point to groups. Slowly th
 For our example, we'll be using the popular Iris dataset, which was made in 1936 and has been used since for many data analytic applications for testing. It contains multiple different flowers, the flower species, and characteristics of that specific flower such as length and width of sepals and petals.
 
 
-![Iris Dataset](Files/iris_example.jpg)
+![Iris Dataset](Files/iris_example.png)
+
+# K-Means
 
 Before we start to analyze the iris dataset, we'll first go through how the k means segmentation method works.
 
-# Initialization of Centroids
+## Initialization of Centroids
 
 The first step of k-means is choosing how many clusters or groups we want to have. One may ask, "Shouldn't we have an idea of how many groups we want to have?". This is true, and is why k-means is usually used to see if we can identify any further groups which we did not know existed.
 
@@ -124,7 +127,7 @@ plt.show()
 As you can see by the two red points, these centroids are not really where you would think the center of the dataset is. That will get fixed later on in the calculations.
 
 
-# Computing distance to Centroid
+## Computing distance to Centroid
 
 Next, we'll compute the distance to the centroid from each data point in the dataset. We'll do this by calculating the Euclidian Distance. 
 
@@ -169,7 +172,7 @@ plt.legend(['Centroids','Data Point 1'])
 plt.show()
 ```
 
-# Assigning data points to Clusters
+## Assigning data points to Clusters
 
 Now that we have the distances for each data point to each centroid, we will assign the each data points to the cluster based on the respective distance from that data point to the centroid. The centroid which has the lowest distance for each data point will result in the data point being assigned to that cluster.
 
@@ -205,7 +208,7 @@ plt.show()
 
 As you can see, there is a clear divide between the two clusters, which visually means our code is working thus far. However, the centroids still do not look as if they're in the center of each cluster.
 
-# Updating Centroids
+## Updating Centroids
 
 Now we will update the centroid locations to be more representative of the clusters that have been assigned to them. We do this by finding the mean value for each feature for every data point in that cluster. 
 
@@ -236,7 +239,7 @@ plt.show()
 These centroids look much more accurate in respect to the actual centers of each cluster.
 
 
-# Putting it all together to Calculate K-means
+## Putting it all together to Calculate K-means
 
 Now that we have each individual part of k-means, we need to put it all together so we iterate over our functions until we believe we've met the desired end state.
 
@@ -269,7 +272,7 @@ def k_means(X, k, max_iters=100, tol=1e-4):
 
 Everything should look familar, exepct for the final part which checks for convergence through a tolerance analysis.
 
-# Calculating K-means for the Iris Dataset
+## Calculating K-means for the Iris Dataset
 
 That we have our whole function for k-means, we'll use all the variables in the iris dataset rather than just two which was done for data visualization purposes, and we'll compare our results to the built-in k-means function in the scikit package.
 
@@ -285,7 +288,7 @@ plt.scatter(centroids[:, 0], centroids[:, 1], color='black', marker='x', label='
 plt.xlabel(iris.feature_names[0])
 plt.ylabel(iris.feature_names[1])
 plt.legend()
-plt.title("K-means plot using Self-made Function")
+plt.title("K-means plot using Custom Function")
 plt.show()
 ```
 
@@ -318,15 +321,135 @@ As you can see, our plots are nearly identical. But the real test is seeing if o
 ```{python}
 compare_centroids = np.allclose(k_means(X, k=3)[0], kmeans.cluster_centers_)
 
-print(f"Self-made function centroids are within tolerance to built-in function centroids: {compare_centroids}")
+print(f"Custom function centroids are within tolerance to built-in function centroids: {compare_centroids}")
 ```
 
 ```{python}
 compare_labels = np.allclose(k_means(X, k=3)[1], kmeans.labels_)
 
-print(f"Self-made function cluster labels are within tolerance to built-in function cluster labels: {compare_labels}")
+print(f"Custom function cluster labels are within tolerance to built-in function cluster labels: {compare_labels}")
 ```
 
 A result of True with np.allclose means all centroids and labels calculated from our custom function were within tolerance and assigned correctly based on the built-in function.
 
 At last, we've learned how to manually calculate and code a k-means function in order to properly segment our data into potential groups to target, although I don't think we'll be advertising to flowers anytime soon...
+
+_todo: Calculate both the within-cluster-sum-of-squares and silhouette scores (you can use built-in functions to do so) and plot the results for various numbers of clusters (ie, K=2,3,...,7). How many clusters are suggested by these two metrics?_
+
+# Determining Number of Clusters
+
+Now that we know how to calculate k means when you know how many clusters you want, lets learn how to figure out what the best number of clusters are.
+
+# Elbow Method
+
+The first method we'll use is the Elbow method, or within-cluster sum of squares (WCSS). Within cluster sum of squares is accomplished after you've found your k-means. Once you have your clusters identified, you calculate the squared euclidian distance for each data point to its cluster centroid, which is just the euclidian distance squared. 
+
+Once you have the squared euclidian distances, you sum them up for each cluster and then sum the clusters together. This will get you the WCSS. 
+
+After determining the WCSS, you plot the WCSS for each number of clusters you want to evaluate (k= 1,2,3,..). You plot should resemble something along the lines of a capital letter L, except slightly curved like a J (just facing the opposite direction of a J). This is because your WCSS will always get smaller as you increase the number of clusters.
+
+The optimal k clusters is the point after there is no longer a large drop between the each WCSS.
+
+Let's show an example using the iris data. We'll determine our k-means and find the WCSS Ffor each k clusters we want to evaluate.
+
+```{python}
+
+wcss = []
+k_values = range(1, 11)
+for k in k_values:
+    kmeans = KMeans(n_clusters=k, random_state=0)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+```
+
+Then, we'll plot the data:
+
+```{python}
+plt.plot(k_values, wcss, 'bo-')
+plt.xlabel('Number of clusters (k)')
+plt.ylabel('Within-cluster sum of squares (WCSS)')
+plt.title('Elbow Method for Optimal k')
+plt.show()
+```
+
+From the plot, we can see the last large drop is when k clusters is 2, so 3 clusters would be our optimal k. This matches what we know about the iris dataset. 
+
+## Silhoutette Method
+
+Another method to determine the most approriate number of clusters is the Solhouette method. Like the Elbow and WCCS method, silhouette score measures distances within the cluster, however it does not use the centroids location, and also measures how far the nearest cluster is to an adjacent cluster.
+
+The formula for silhouette score is below:
+
+$$ s(i) =\frac{b(i) - a(i)}{\max(a(i), b(i))} \ $$
+
+- $a(i)$ is the mean distance between the sample and all other points in the same cluster.
+- $b(i)$ is the mean distance between the sample and all points in the nearest cluster that the sample is not a part of.
+
+Once you get the silhouette scores for every data point in the dataset, you find the mean to get the overall score. 
+
+A higher silhouete score is considered optimal for each k clusters you evaluate.
+
+The distance between all points within the cluster, $a(i)$, should be less than the distance between points in the nearest cluster $b(i)$. In this logic, you can see from the formula how a higher score is better, since those in the nearest cluster are farther away than within the cluster.
+
+
+Now lets calculate and plot our silhouette scores for the iris dataset. We'll use the silhouette_score function in the sklearn.metrics package.
+
+```{python}
+from sklearn.metrics import silhouette_score
+
+silhouette_scores = []
+k_values = range(2, 11)  # Silhouette score is not defined for k=1
+
+for k in k_values:
+    kmeans = KMeans(n_clusters=k, random_state=0, n_init='auto')
+    kmeans.fit(X)
+    score = silhouette_score(X, kmeans.labels_)
+    silhouette_scores.append(score)
+```
+
+```{python}
+plt.plot(k_values, silhouette_scores, 'bo-')
+plt.xlabel('Number of clusters (k)')
+plt.ylabel('Silhouette Score')
+plt.title('Silhouette Method for Optimal k')
+plt.show()
+```
+
+From this plot, we see that 2 clusters actually has a higher score than 3 clusters. 
+
+Lets take a deeper look at the silhouette scores via a more complex plot. We'll use the SilhouetteVisulaizer function from the yellowbrick.cluster package. We'll look at 2 clusters vs 3 clusters. 
+
+```{python}
+from yellowbrick.cluster import SilhouetteVisualizer
+
+kmeans = KMeans(n_clusters=2, random_state=0)
+visualizer = SilhouetteVisualizer(kmeans, colors='yellowbrick')
+
+visualizer.fit(X)
+visualizer.show()
+```
+
+```{python}
+kmeans = KMeans(n_clusters=3, random_state=0)
+visualizer = SilhouetteVisualizer(kmeans, colors='yellowbrick')
+
+visualizer.fit(X)       
+visualizer.show() 
+```
+
+For these plots, we're looking for 2 main attributes:
+
+1. Cluster Size
+- Cluster size should be similar on the plot, meaning the height of clusters or the number of data points in each cluster.
+
+2. Cluster Width
+- An ideal silhouette plot should have at least some of the data points with a silhouette score above the mean.
+- The longer or wider the bar, the higher silhouette score.
+
+We can see that the plot of 3 clusters actually has more similar cluster sizes than 2 clusters. As well, both plots have some of their data points above the average score, and non are negative. 
+
+After looking at both types of silhouette plots, we can see that 3 clusters may be the better option.
+
+This displays how different methods for evaluating clustering results may have various outcomes. The correct or best answer may be using a combination of both methods.
+
+ 
