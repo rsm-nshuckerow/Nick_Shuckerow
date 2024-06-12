@@ -1,6 +1,8 @@
 ---
-title: "My Projects"
-listing:
-  contents: projects  # <-- the sub-directory with blog content
-  type: grid          # <-- my preferred layout type
+title: "Projects"
 ---
+
+# Projects by Subject
+
+## Marketing Analytics
+[![Marketing Analytics](marketing-analytics.jpg)](projects/Marketing_Analytics/index.html)
