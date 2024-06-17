@@ -202,7 +202,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="dataset-research" class="level1">
 <h1>1. Dataset Research</h1>
 <p>Before we go into any complex analysis, we first want to get familar with the data.</p>
-<div id="e60ace82" class="cell" data-execution_count="1">
+<div id="727cefb4" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'data_for_drivers_analysis.csv'</span>)</span>
@@ -312,7 +312,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="182ac46b" class="cell" data-execution_count="2">
+<div id="58a4881a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'The number of rows in the dataset are </span><span class="sc">{</span>data<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">.'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'The number of unique IDs in the dataset are </span><span class="sc">{</span>data<span class="sc">.</span><span class="bu">id</span><span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss">.'</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'The number of unique brands in the dataset are </span><span class="sc">{</span>data<span class="sc">.</span>brand<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss">.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -322,7 +322,7 @@ The number of unique IDs in the dataset are 940.
 The number of unique brands in the dataset are 10.</code></pre>
 </div>
 </div>
-<div id="3a19a79b" class="cell" data-execution_count="3">
+<div id="66a17cdd" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -480,7 +480,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 <h1>2. Pearson Correlations</h1>
 <p>The analysis we’ll conduct is determining the Pearson Correlations for this dataset. That is, how each indepenent variable is correlated to satisfaction.</p>
 <p>We’ll be using the corr function in python to determine our correlations in respect to satisfaction.</p>
-<div id="14f4d1af" class="cell" data-execution_count="4">
+<div id="609cd6a7" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate pearson correlations with satisfaction being the y variable and the rest being the x variables</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>satisfaction <span class="op">=</span> data.drop([<span class="st">'id'</span>, <span class="st">'brand'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
@@ -560,7 +560,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 <p>Polychoric correlations are most notably used for ordinal variables, or variables that have a specific rank order, for instance military ranks (Captain, Colonel, General, etc).</p>
 <p>Our satisfaction variable is an ordinal variable which ranges from 1-5.</p>
 <p>For this calculation, we used an R package within python. R has a much simpler package for conducting these calculations.</p>
-<div id="2ecce8d5" class="cell" data-execution_count="5">
+<div id="dcc3f248" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rpy2.robjects <span class="im">as</span> robjects</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rpy2.robjects <span class="im">import</span> pandas2ri</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -606,7 +606,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 <span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the percentage of each polychoric correlation</span></span>
 <span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>correlation_df[<span class="st">'Polychoric_Corr_%'</span>] <span class="op">=</span> (correlation_df[<span class="st">'Polychoric_Corr'</span>] <span class="op">/</span> sum_polychoric_correlations).<span class="bu">round</span>(<span class="dv">3</span>)<span class="op">*</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="17799a09" class="cell" data-execution_count="6">
+<div id="29318c5e" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make variable column the index</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>correlation_df.set_index(<span class="st">'Variable'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
@@ -688,7 +688,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 <h1>4. Standardized Multiple Regression Coefficients</h1>
 <p>Standardized regression coefficients are used for a different purpose than our last two methods. Pearson’s and Polychoric used correlations, which do not necessarily relate to importance of each variable on the dependent variable. Standardized regression coefficients measure importance for each variable in a regression analysis by scaling all the independent variables so they are now all on equal scales. The scaled indepenent variables are then fit to a regression model where their betas or standardized coefficients are generated.</p>
 <p>First, we’ll scale and fit our data to get our coefficients, then find their importance.</p>
-<div id="d3227af7" class="cell" data-execution_count="7">
+<div id="35275f8d" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -812,7 +812,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 <p>For example, one combination would be y = beta-a<em>a + beat-b</em>b + beta-c<em>c.&nbsp;Another combination would be y = beta-a</em>a + beta-b<em>b. Another one would be y = beta-a</em>a. We would calculate the R2 values for both of these models. We would subtract the R2 value from of the equation with variable c from the R2 value from the equaion without c to get the difference. We would do this for every combination of variable, then average the differences in R2 for every variable which we got.</p>
 <p>Lets get into the code for calculating Shapley values in python.</p>
 <p>First, we’ll make the linear regression model.</p>
-<div id="4d346956" class="cell" data-execution_count="8">
+<div id="635e954a" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load dataset</span></span>
@@ -828,7 +828,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 </div>
 </div>
 <p>Next, we’ll generate the Shapley Values using the SHAP package on python</p>
-<div id="a629cb06" class="cell" data-execution_count="9">
+<div id="966d1032" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shap</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize SHAP explainer</span></span>
@@ -848,7 +848,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 </div>
 </div>
 <p>Finally, we’ll put our Shapley Values into our table.</p>
-<div id="f23c8ac9" class="cell" data-execution_count="10">
+<div id="22b42070" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>shap_values <span class="op">=</span> pd.DataFrame(shap_values, columns<span class="op">=</span>columns_of_interest)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># mean of absolute values of each column</span></span>
@@ -956,7 +956,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 <h1>6. Johnson’s Epsilon</h1>
 <p>Johnson’s Epsilon, also known as relative weight analysis, is an approximation of the Shapley Values which uses a different calculation approach. It uses Eigenvectors and Eigenvalues to create a set of uncorrelated independent variables which can be used to calculate the partial effect of each independent variable.</p>
 <p>The code is relatively simple in python using the relativeImp function as seen below.</p>
-<div id="1e4fdedb" class="cell" data-execution_count="11">
+<div id="580d5af7" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> relativeImp <span class="im">import</span> relativeImp</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1074,7 +1074,7 @@ The number of unique brands in the dataset are 10.</code></pre>
 <section id="mean-decrease-in-rf-gini-coefficient" class="level1">
 <h1>7. Mean Decrease in RF Gini Coefficient</h1>
 <p>The mean decrease in Gini coefficient also measures importance, but for Random Forests and Decision trees. It does so by measuring the impurity before and after a split in the decision tree. If the split performs well, the decrease in impurity will be higher.</p>
-<div id="68808ac9" class="cell" data-execution_count="12">
+<div id="1c7e900e" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>

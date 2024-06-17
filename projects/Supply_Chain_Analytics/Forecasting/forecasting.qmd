@@ -1,0 +1,233 @@
+---
+title: "Forecasting Methods"
+author: "Nicholas Shuckerow"
+date: today
+format: html
+---
+
+# Forecasting Methods
+
+Forecasting plays a critical role in a plethora of industries. It allows businesses to plan for the future, anticipate demand, and make informed decisions. In this notebook, we will explore some of the most popular forecasting methods and apply them to the problem of predicting the future sales of a retail store.
+
+We'll be going over averages, simple exponential smoothing, and Holt's linear trend method. 
+
+
+## Average
+
+The natural tendency when trying to forecast a time series is to use the average of the series. This is a simple method that can be useful when the series is relatively stable and doesn't have any trends or seasonality. However, this is the simplest of methods, and may not be maximizing your profits.
+
+## Simple Exponential Smoothing
+
+Simple exponential smoothing (SES) is a technique that assigns a weight to past observations in order to make the next prediction. The weight can be between 0 and 1, with 1 meaning that it takes the full value of the previous observation and 0 meaning that it ignores the previous observation completely.
+
+
+The formula for Simple Exponential Smoothing is:
+
+$$ F_{t+1} = \alpha Y_t + (1 - \alpha) F_t $$
+
+Where:
+
+- $F_{t+1}$ is the forecast for the next period
+- $Y_t$ is the actual value for the current period
+- $F_t$ is the forecast for the current period
+- $\alpha$ is the smoothing factor or level
+
+We'll see alpha be called the smoothing level in python packages for SES.
+
+A loss function can also be incorporated into the SES model in order to optimize your parameters. A loss function is a method of evaluating how well your algorithm and its parameters are performing. The most common loss function for SES is the Mean Squared Error (MSE). The MSE is calculated by taking the difference between the actual value and the forecasted value, squaring it, and then taking the average of all the squared differences.
+
+Once the loss function is calculated, the goal is to minimize the loss by adjusting the parameters which in this case is the smoothing factor. There are many optimization algorithms that can be used to minimize the loss function, such as gradient descent.
+
+## Holt's Linear Trend Method
+
+Holt's Linear Trend Method is an extension of SES that incorporates a trend component. This method is useful when the data has a trend but no seasonality. The formula for Holt's Linear Trend Method is:
+
+$$ F_{t+h} = l_t + h \cdot b_t $$
+
+Where:
+
+- $F_{t+h}$ is the forecast for the next period
+- $l_t$ is the smoothed value at the current period
+- $b_t$ is the trend for the current period
+- $h$ is the number of periods into the future you want to forecast
+
+The formula for the level, $l_t$, is:
+
+$$ l_t = \alpha Y_t + (1 - \alpha)(l_{t-1} + b_{t-1}) $$
+
+The formula for the trend, $b_t$, is:
+
+$$ b_t = \beta(l_t - l_{t-1}) + (1 - \beta)b_{t-1} $$
+
+Where:
+
+- $\alpha$ is the smoothing factor for the level
+- $\beta$ is the smoothing factor for the trend
+- $Y_t$ is the actual value for the current period
+- $l_{t-1}$ is the smoothed value for the previous period
+- $b_{t-1}$ is the trend for the previous period
+
+
+Just like with SES, Holt's Linear Trend Method can incorporate a loss function to optimize the parameters. The loss function for Holt's Linear Trend Method is the same as the loss function for SES, which is the Mean Squared Error (MSE).
+
+
+# Evaluation
+
+Now lets get into our code! For our examples, we'll be using data from a cupcake shop, Christie's Cupcakes. The dataset contains the weekly sales of the store from nearly the past 10 years (500 weeks).
+
+Some additional info for our calculations:
+
+The retail price per cupcake is $4, unit cost per cupcake is $0.80, and there is no salvage costs.
+
+We'll use the first 300 weeks as our basis for forecasting the next 200 weeks up to week 500.
+
+## Initial Setup
+
+Let's start by loading the data and taking a look at the first few rows and some basic analysis.
+
+```{python}
+#| include: false
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import pyrsm as rsm
+from statsmodels.tsa.api import SimpleExpSmoothing
+from statsmodels.tsa.holtwinters import Holt
+from sklearn.linear_model import LinearRegression
+```
+
+```{python}
+#| echo: false
+demand = pd.read_csv('forecasting_demand_data_2024.csv')[['t', 'demand']]
+demand.head()
+```
+
+```{python}
+#| echo: false
+demand.describe()
+```
+
+We can see that the mean demand among the dataset is 3012 cupcakes with a standard deviation of 678. We've confirmed there are 500 data points in the dataset through the "counts" variable. We'll take a look at the plot of the data.
+
+```{python}
+plt.plot(demand['t'], demand['demand'])
+plt.xlabel('Weeks')
+plt.ylabel('Demand')
+plt.title('Demand vs Weeks')
+```
+
+There is a clear upward trend, with a decent amount of variation. That should give us a hint at which forecasting method to use. However, we will continue with all the methods to show the differences.
+
+## Average
+
+As stated previously, averaging is the most common and simple method for forecasting. It could be moving average, or a cumulative average. Lets see what our average is for the first 300 weeks.
+
+```{python}
+#| echo: false
+avg_demand = demand.loc[:300, "demand"].mean().__round__(0)
+print(f'The average demand for cupcakes in the first 300 weeks is {avg_demand} cupcakes')
+```
+
+With our average demand, lets determine how much profit we would make in the last 200 weeks.
+
+```{python}
+retail = 4
+unit_cost = 0.8
+
+demand['profit'] = np.where(demand['demand'] > avg_demand, retail*avg_demand - unit_cost*avg_demand, retail*demand['demand'] - unit_cost*avg_demand)
+
+avg_profit = np.round(demand.loc[:300, 'profit'].mean(), 2)
+
+print(f'The average profit for the last 200 weeks when using only the average demand for the past 300 weeks is ${avg_profit}')
+```
+
+```{python}
+profits = pd.DataFrame({'Profit ($)':[avg_profit]}, index=['Avg'])
+
+profits
+```
+
+Using just the mean as the way to forecast for the next 200 weeks makes an average weekly profit of $7508.40. Not bad, but lets see how the cumulative average works out. 
+
+### Cumulative Average
+
+Now, it doesn't matter about the past 300 weeks, since we are calculating a new average after every week, but we'll still only calculate the average weekly profit for the last 200 weeks for comparison.
+
+```{python}
+demand['cum_avg_demand'] = demand['demand'].expanding().mean()
+```
+
+Let's see what the cumulative average demand looks like when plotted.
+
+```{python}
+plt.plot(demand['t'], demand['cum_avg_demand'])
+plt.xlabel('Weeks')
+plt.ylabel('Cumulative Demand')
+plt.title('Cumulative Demand vs Weeks')
+plt.show()
+```
+
+As expected, the cumulative average has much less variation as the weeks go on, and takes a very linear trend line.
+
+```{python}
+demand['cum_profit'] = np.where(demand['demand'] > demand['cum_avg_demand'], retail*demand['cum_avg_demand'] - unit_cost*demand['cum_avg_demand'], retail*demand['demand'] - unit_cost*demand['cum_avg_demand'])
+
+avg_cum_profit = np.round(demand.loc[300:, 'cum_profit'].mean(), 2)
+
+print(f'The average profit for the last 200 weeks when using the cumulative average demand is ${avg_cum_profit}')
+```
+
+```{python}
+profits.loc['Avg Cumul.', 'Profit ($)'] = avg_cum_profit
+
+profits
+```
+
+The average profit decreased for cumulative profit as compared to just using the average for the first 300 weeks.
+
+## Simple Exponential Smoothing
+
+As discussed previously, Simple Exponential Smoothing (SES) assigns a weight to the current and previous level. If the weight (alpha) is high (closer to 1), that means the most recent data will weigh more heavily into the forecast than the past data points. On the opposite end, if alpha is low, it means the past data is used more to make the next forecast.
+
+Let's implement the SES method into our data. We'll use a smoothing level of 0.2 initially and take a look at the plot.
+
+```{python}
+SES_model = SimpleExpSmoothing(demand.loc[:300, 'demand']).fit(smoothing_level=0.2, optimized=False)
+
+demand['SES_forecast'] = SES_model.fittedvalues
+demand.loc[300:, 'SES_forecast'] = SES_model.forecast(200)
+```
+
+```{python}
+#| echo: false
+plt.plot(demand['t'], demand['demand'])
+plt.plot(demand.loc[:300, 't'], demand.loc[:300, 'SES_forecast'])
+plt.plot(demand.loc[300:, 't'], demand.loc[300:, 'SES_forecast'])
+plt.xlabel('Weeks')
+plt.ylabel('Demand')
+plt.title('SES Demand vs Weeks')
+plt.legend(['Actual Demand', 'SES Fitted Values', 'SES Forecast'])
+plt.show()
+```
+
+The SES method produces a singular value for the last 200 weeks. This is correct, and is why SES method is not always used. As seen in the formula, it uses keeps using the last actual value to make the next predicition. Once we want to forecast, it produces a singular value for all the future forecasts until you want to recalculate.
+
+Lets calculate the profit for SES non-optimized version.
+
+```{python}
+demand['SES_profit'] = np.where(demand['demand'] > demand['SES_forecast'], retail*demand['SES_forecast'] - unit_cost*demand['SES_forecast'], retail*demand['demand'] - unit_cost*demand['SES_forecast'])
+
+avg_SES_profit = np.round(demand.loc[300:, 'SES_profit'].mean(), 2)
+
+profits.loc['SES', 'Profit ($)'] = avg_SES_profit
+
+profits
+```
+
+Implementing SES method increased profits by nearly $3000 weekly!
+
+Now we'll use and optimized alpha with the SES method. Keep in mind, alpha is being optimized based on forecast, not on profit. We'll see if the optimized alpha translates to increased profits.
+
+```{python}
+
+```

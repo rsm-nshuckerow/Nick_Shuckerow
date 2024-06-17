@@ -6,3 +6,6 @@ title: "Projects"
 
 ## Marketing Analytics
 [![Marketing Analytics](marketing-analytics.jpg)](projects/Marketing_Analytics/index.html)
+
+## Supply Chain Analytics
+[![Supply Chain Analytics](marketing-analytics.jpg)](projects/Supply_Chain_Analytics/index.html)

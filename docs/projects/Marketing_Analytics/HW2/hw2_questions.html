@@ -213,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
-<div id="3c7925ab" class="cell" data-execution_count="1">
+<div id="93a656da" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -287,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>After reading in the data, we want to confirm that all businesses are unique and are not listed twice in the data</p>
-<div id="22331656" class="cell" data-execution_count="2">
+<div id="73cbca78" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count the number of unique values in the column 'Unnamed: 0'</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'Unnamed: 0'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -296,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Each row is fact for an business which is not repeated in the dataset.</p>
-<div id="5d748524" class="cell" data-execution_count="3">
+<div id="80369dc7" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count number of customers and non-customers</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>customers <span class="op">=</span> data[data[<span class="st">'iscustomer'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'iscustomer'</span>].count()</span>
@@ -308,7 +308,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now we will compare histograms based on number of patents for customers and non-customers on two separate plots.</p>
-<div id="ac7ca321" class="cell" data-execution_count="4">
+<div id="944484a2" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of # of patents for Customers</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -328,7 +328,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="fa7e6d82" class="cell" data-execution_count="5">
+<div id="14644e82" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of # of patents for non-customers</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -349,7 +349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Next, we’ll look at mean number of patents for customers and non-customers so we have a baseline for the histograms</p>
-<div id="be74dbaf" class="cell" data-execution_count="6">
+<div id="1145fafc" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mean_patents_customers <span class="op">=</span> data[data[<span class="st">'iscustomer'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'patents'</span>].mean()</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mean_patents_noncustomers <span class="op">=</span> data[data[<span class="st">'iscustomer'</span>] <span class="op">==</span> <span class="dv">0</span>][<span class="st">'patents'</span>].mean()</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -364,7 +364,7 @@ Mean patents for non-customers: 3.62</code></pre>
 <p>Both plots have a large drop off around 6 patents (For customers it is slightly less than 6). The number of non-customers is significantly higher than the number of customers, totaling to 1303 non-customers and 197 customers. The mean number of patents for customers was 4.09 and the mean number of patents for non-customers was 3.62. This is a difference of about 0.5 patents. The number of customers and non-customers is important to keep into account when conducting regression models, as non-customers have a higher weight due to the higher frequency of occurence in the dataset.</p>
 <p>Blueprinty customers are not selected at random. It may be important to account for systematic differences in the age and regional location of customers vs non-customers.</p>
 <p>First, we’ll create a table showing the counts for each region based on customers and non-customers. We’ll looking at the proportion which each region has respectively for customers and non-customers.</p>
-<div id="2937133b" class="cell" data-execution_count="7">
+<div id="e1fe6a5e" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group by region and count number of customers and non-customers</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>region <span class="op">=</span> data.groupby(<span class="st">'region'</span>)[<span class="st">'iscustomer'</span>].value_counts().unstack()</span>
@@ -443,7 +443,7 @@ Mean patents for non-customers: 3.62</code></pre>
 </div>
 </div>
 <p>Below, you’ll see a plot of the customers and non-customers by region.</p>
-<div id="a98c0b36" class="cell" data-execution_count="8">
+<div id="c6b81543" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a plot of the number of customers and non-customers by region side by side</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>data.groupby(<span class="st">'region'</span>)[<span class="st">'iscustomer'</span>].value_counts().unstack().plot(kind<span class="op">=</span><span class="st">'bar'</span>, stacked<span class="op">=</span><span class="va">False</span>)</span>
@@ -463,7 +463,7 @@ Mean patents for non-customers: 3.62</code></pre>
 <p>The Northeast has by far the most customers and non-customers, and the number of non-customers in each region clearly outweighs the number of customers. Although ranking each respective customer and non-customer base by region comes out to be nearly the same ranking, the proportions are different.</p>
 <p>For the customers, nearly 60% are from the NE, while only 40% of non-customers are from the NE.</p>
 <p>Next, we’ll do the same as we did for regions, except with age. One variation between the two will be binning the age groups for every 5 years. In this case, 0-5 years is one group, 5-10 years is another group, etc.</p>
-<div id="aa8d5d22" class="cell" data-execution_count="9">
+<div id="fb496079" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group by age with bins every 5 years and count number of customers and non-customers</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'age_bins'</span>] <span class="op">=</span> pd.cut(data[<span class="st">'age'</span>], bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">60</span>, <span class="dv">5</span>))</span>
@@ -476,7 +476,7 @@ Mean patents for non-customers: 3.62</code></pre>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>age</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_53152/1316710865.py:5: FutureWarning:
+<pre><code>/tmp/ipykernel_63947/1316710865.py:5: FutureWarning:
 
 The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
 </code></pre>
@@ -586,7 +586,7 @@ The default of observed=False is deprecated and will be changed to True in a fut
 </div>
 </div>
 </div>
-<div id="45837102" class="cell" data-execution_count="10">
+<div id="15770cbe" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a plot of the number of customers and non-customers by age side by side</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>data.groupby(<span class="st">'age_bins'</span>)[<span class="st">'iscustomer'</span>].value_counts().unstack().plot(kind<span class="op">=</span><span class="st">'bar'</span>, stacked<span class="op">=</span><span class="va">False</span>)</span>
@@ -595,7 +595,7 @@ The default of observed=False is deprecated and will be changed to True in a fut
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of Customers and Non-Customers by Age of Company'</span>)</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Non-Customer'</span>, <span class="st">'Customer'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_53152/196641801.py:3: FutureWarning:
+<pre><code>/tmp/ipykernel_63947/196641801.py:3: FutureWarning:
 
 The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
 </code></pre>
@@ -609,7 +609,7 @@ The default of observed=False is deprecated and will be changed to True in a fut
 </div>
 </div>
 <p>For age, we’ll also look at the mean age of customers and non-customers, and calculate the 95% confidence intervals.</p>
-<div id="46228cd4" class="cell" data-execution_count="11">
+<div id="8c6577d8" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find mean age for customers and non-customers</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>mean_age_customers <span class="op">=</span> data[data[<span class="st">'iscustomer'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'age'</span>].mean()</span>
@@ -622,7 +622,7 @@ The default of observed=False is deprecated and will be changed to True in a fut
 Mean age for non-customers: 26.69</code></pre>
 </div>
 </div>
-<div id="f86e75ca" class="cell" data-execution_count="12">
+<div id="a1b9b223" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate a 95% confidence interval for the mean age of customers and non-customers</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -655,7 +655,7 @@ Mean age for non-customers: 26.69</code></pre>
 <p>Below is the log-likelihood function for the Poisson distribution. The likelihood function of lambda given Y is the exact same as the function of Y given lambda.</p>
 <p>ℓ(λ∣Y)=−λ+Ylog(λ)−log(Y!)</p>
 <p>Below is the code for the log-likelihood function for a poisson distribution:</p>
-<div id="c5e64d97" class="cell" data-execution_count="13">
+<div id="bb4abe40" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> poisson_log_likelihood(lam, y):</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
@@ -676,7 +676,7 @@ Mean age for non-customers: 26.69</code></pre>
 <span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> log_likelihood</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we’ll plot the log-likelihoods using our observed number of lambdas as Y and then a range of values for lambda (1-10).</p>
-<div id="3b95029f" class="cell" data-execution_count="14">
+<div id="214c82da" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">11</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>log_likelihood_values <span class="op">=</span> []</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -686,7 +686,7 @@ Mean age for non-customers: 26.69</code></pre>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>log_likelihood_values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_53152/1539929848.py:17: DeprecationWarning:
+<pre><code>/tmp/ipykernel_63947/1539929848.py:17: DeprecationWarning:
 
 `np.math` is a deprecated alias for the standard library `math` module (Deprecated Numpy 1.25). Replace usages of `np.math` with `math`
 </code></pre>
@@ -704,7 +704,7 @@ Mean age for non-customers: 26.69</code></pre>
  -7322.4991810913525]</code></pre>
 </div>
 </div>
-<div id="19f70e40" class="cell" data-execution_count="15">
+<div id="660b6092" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>plt.plot(years, log_likelihood_values)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Lambda'</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Likelihood'</span>)</span>
@@ -719,7 +719,7 @@ Mean age for non-customers: 26.69</code></pre>
 </div>
 </div>
 <p>We’ll now create our negative poisson MLE function and analyze the output betas.</p>
-<div id="7f5cc8d1" class="cell" data-execution_count="16">
+<div id="656f25cc" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> neg_poisson_log_likelihood(lam, y):</span>
@@ -740,14 +740,14 @@ Mean age for non-customers: 26.69</code></pre>
 <span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We use np.sum(np.log(y_factorials)) to sum log of factorials</span></span>
 <span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>(<span class="op">-</span>n <span class="op">*</span> lam <span class="op">+</span> sum_y <span class="op">*</span> np.log(lam) <span class="op">-</span> np.<span class="bu">sum</span>([np.log(np.math.factorial(i)) <span class="cf">for</span> i <span class="kw">in</span> y]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="673217f7" class="cell" data-execution_count="17">
+<div id="9a60a362" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> np.mean(data[<span class="st">'patents'</span>])</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> minimize(neg_poisson_log_likelihood, mean, args<span class="op">=</span>(data[<span class="st">'patents'</span>]), bounds <span class="op">=</span> [(<span class="dv">0</span>, <span class="va">None</span>)])</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_53152/2966890401.py:19: DeprecationWarning:
+<pre><code>/tmp/ipykernel_63947/2966890401.py:19: DeprecationWarning:
 
 `np.math` is a deprecated alias for the standard library `math` module (Deprecated Numpy 1.25). Replace usages of `np.math` with `math`
 </code></pre>
@@ -770,7 +770,7 @@ Mean age for non-customers: 26.69</code></pre>
 <h3 class="anchored" data-anchor-id="estimation-of-poisson-regression-model">Estimation of Poisson Regression Model</h3>
 <p>Next, we extend our simple Poisson model to a Poisson Regression Model such that <span class="math inline">\(Y_i = \text{Poisson}(\lambda_i)\)</span> where <span class="math inline">\(\lambda_i = \exp(X_i'\beta)\)</span>. The interpretation is that the success rate of patent awards is not constant across all firms (<span class="math inline">\(\lambda\)</span>) but rather is a function of firm characteristics <span class="math inline">\(X_i\)</span>. Specifically, we will use the covariates age, age squared, region, and whether the firm is a customer of Blueprinty.</p>
 <p>First, we’ll create our new poisson MLE function, incorporating our explanatory variables into the calculation.</p>
-<div id="54415a52" class="cell" data-execution_count="18">
+<div id="e6f0cc2d" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -781,7 +781,7 @@ Mean age for non-customers: 26.69</code></pre>
 <span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>log_likelihood</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we’ll change the format of the data to be able to be used in our functions and analysis.</p>
-<div id="60341373" class="cell" data-execution_count="19">
+<div id="f2cec8a6" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert regions column to boolean columns, dropping the first region to be the default value</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.get_dummies(data, columns<span class="op">=</span>[<span class="st">'region'</span>], drop_first<span class="op">=</span><span class="va">True</span>)</span>
@@ -803,7 +803,7 @@ Mean age for non-customers: 26.69</code></pre>
 <span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'age_squared'</span>] <span class="op">=</span> data[<span class="st">'age'</span>]<span class="op">**</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c5206c81" class="cell" data-execution_count="20">
+<div id="13162760" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and preprocess your data as before, ensuring that features are scaled</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -831,7 +831,7 @@ Mean age for non-customers: 26.69</code></pre>
 </div>
 </div>
 <p>Now that we calculated our betas from our self-built function, we’ll verify our betas with a built-in regression function.</p>
-<div id="530e9dcd" class="cell" data-execution_count="21">
+<div id="2693d0c4" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a Poisson regression model using statsmodels</span></span>
@@ -850,7 +850,7 @@ Model Family:                 Poisson   Df Model:                            7
 Link Function:                    Log   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -3275.9
 Date:                Wed, 12 Jun 2024   Deviance:                       2178.8
-Time:                        09:58:58   Pearson chi2:                 2.11e+03
+Time:                        12:17:52   Pearson chi2:                 2.11e+03
 No. Iterations:                     5   Pseudo R-squ. (CS):             0.1152
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -868,7 +868,7 @@ x7             0.0572      0.053      1.085      0.278      -0.046       0.160
 </div>
 </div>
 <p>Finally, we’ll calculate our standard errors for each respective beta or coefficient and compare to our built-in regression analysis results.</p>
-<div id="b5cac8e0" class="cell" data-execution_count="22">
+<div id="2d5800f9" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Hessian at the optimal beta</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.linalg <span class="im">import</span> inv</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>hessian_inv <span class="op">=</span> result.hess_inv  <span class="co"># Inverse Hessian is returned by BFGS</span></span>
@@ -921,7 +921,7 @@ Variable Definitions
 </div>
 </div>
 <p>Using the airbnb data, we will build a likelihood function for this poisson regression. However, we first need to read the data and look at its characteristics.</p>
-<div id="e6d4b3f1" class="cell" data-execution_count="23">
+<div id="2553f20d" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read airbnb csv</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>airbnb <span class="op">=</span> pd.read_csv(<span class="st">'airbnb.csv'</span>)</span>
@@ -1043,14 +1043,14 @@ Variable Definitions
 </div>
 </div>
 </div>
-<div id="3d0d49c2" class="cell" data-execution_count="24">
+<div id="56eaf957" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count number of listings which have 0 reviews</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>airbnb[airbnb[<span class="st">'number_of_reviews'</span>] <span class="op">==</span> <span class="dv">0</span>][<span class="st">'number_of_reviews'</span>].count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>9481</code></pre>
 </div>
 </div>
-<div id="01fc5e5c" class="cell" data-execution_count="25">
+<div id="d7f53ee1" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create subset of data which only shows bedrooms which are nan</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>airbnb.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1073,7 +1073,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Looking at the data initally, we see there are many cells having null values which we need to address. The majority of them are within the review score columns. To address this, we will drop the cells which have 0 days listed (brand new listings). For bedrooms and bathrooms in a shared or private room, we will assume bedrooms is 1 and bathrooms are 0. It is very common for rooms to not have a bathroom. For all other data which is null, we cannot say with reasonable certainty what the value would be. For example, if bedrooms or bathrooms are null for entire home or apartment, we cannot say with reasonable certainty the number of bedrooms or bathrooms.</p>
-<div id="cd3d0f61" class="cell" data-execution_count="26">
+<div id="e312b711" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fill bedrooms with 1 and bathrooms with 0 if nan and if room type is private or shared room</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>airbnb.loc[(airbnb[<span class="st">'bedrooms'</span>].isnull()) <span class="op">&amp;</span> (airbnb[<span class="st">'room_type'</span>] <span class="op">==</span> <span class="st">'Private room'</span>), <span class="st">'bedrooms'</span>] <span class="op">=</span> <span class="dv">1</span></span>
@@ -1081,17 +1081,17 @@ dtype: int64</code></pre>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>airbnb.loc[(airbnb[<span class="st">'bathrooms'</span>].isnull()) <span class="op">&amp;</span> (airbnb[<span class="st">'room_type'</span>] <span class="op">==</span> <span class="st">'Private room'</span>), <span class="st">'bathrooms'</span>] <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>airbnb.loc[(airbnb[<span class="st">'bathrooms'</span>].isnull()) <span class="op">&amp;</span> (airbnb[<span class="st">'room_type'</span>] <span class="op">==</span> <span class="st">'Private room'</span>), <span class="st">'bathrooms'</span>] <span class="op">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1be6a543" class="cell" data-execution_count="27">
+<div id="c8e27ac3" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropping all other rows which have null values</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>airbnb <span class="op">=</span> airbnb.dropna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9b0b6c2e" class="cell" data-execution_count="28">
+<div id="da9af9fb" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>airbnb.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>(30234, 14)</code></pre>
 </div>
 </div>
-<div id="dc08aa2c" class="cell" data-execution_count="29">
+<div id="e8a1dc2f" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>airbnb.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <div>
@@ -1224,7 +1224,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="712da775" class="cell" data-execution_count="30">
+<div id="6f48f93f" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>airbnb.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -1254,12 +1254,12 @@ memory usage: 3.5+ MB</code></pre>
 <p>Most of the listings in the dataset rank very high in cleanliness, location, and value, with all having an average of above 9 out of 10.</p>
 <p>The price of the listings is also left skewed, with the average price being $145, but the standard deviation being $211, meaning there is a large spread in the price of listings like the number of reviews. However with this spread, due to the fact that the price can’t be negative, the distribution is left skewed.</p>
 <p>While looking at the info for the columns, we will need to convert some of the variables for regression analysis. The columns need be an integer or float data type. We will be changing room type and instant bookable columns.</p>
-<div id="55982068" class="cell" data-execution_count="31">
+<div id="2d5f841c" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert room_type to boolean</span></span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>airbnb <span class="op">=</span> pd.get_dummies(airbnb, columns<span class="op">=</span>[<span class="st">'room_type'</span>], drop_first<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="f4f62672" class="cell" data-execution_count="32">
+<div id="93fa695d" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> airbnb[<span class="st">'instant_bookable'</span>]:</span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">==</span> <span class="st">'t'</span>:</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>        airbnb[<span class="st">'instant_bookable'</span>] <span class="op">=</span> <span class="dv">1</span></span>
@@ -1267,13 +1267,13 @@ memory usage: 3.5+ MB</code></pre>
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>        airbnb[<span class="st">'instant_bookable'</span>] <span class="op">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Prior to building the regression model, we need to make sure the data is all in the same time interval since we are assuming it’s a poisson distribution.</p>
-<div id="d91b7264" class="cell" data-execution_count="33">
+<div id="f5ef30ec" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting number of reviews to reviews per year</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>airbnb[<span class="st">'reviews_per_year'</span>] <span class="op">=</span> airbnb[<span class="st">'number_of_reviews'</span>] <span class="op">/</span> airbnb[<span class="st">'days'</span>] <span class="op">*</span> <span class="dv">365</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We will also be scaling the data in order to prevent precision loss during our regression analysis.</p>
-<div id="03de81ac" class="cell" data-execution_count="34">
+<div id="56725799" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
@@ -1285,7 +1285,7 @@ memory usage: 3.5+ MB</code></pre>
 <span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>airbnb[<span class="st">'review_scores_value'</span>] <span class="op">=</span> scaler.fit_transform(airbnb[[<span class="st">'review_scores_value'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we will use the previously generated MLE function to get the maximum likelihood estimators to predict our reviews per year.</p>
-<div id="5dea578c" class="cell" data-execution_count="35">
+<div id="9571b45e" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.c_[np.ones(<span class="bu">len</span>(airbnb)), airbnb[<span class="st">'days_scaled'</span>], airbnb[<span class="st">'bathrooms'</span>], airbnb[<span class="st">'bedrooms'</span>], airbnb[<span class="st">'price'</span>], </span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>          airbnb[<span class="st">'review_scores_cleanliness'</span>], airbnb[<span class="st">'review_scores_location'</span>], airbnb[<span class="st">'review_scores_value'</span>], </span>
 <span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>          airbnb[<span class="st">'instant_bookable'</span>], airbnb[<span class="st">'room_type_Private room'</span>], airbnb[<span class="st">'room_type_Shared room'</span>]]</span>
@@ -1304,7 +1304,7 @@ memory usage: 3.5+ MB</code></pre>
 </div>
 </div>
 <p>Next, we will confirm our betas with a built-in regression function.</p>
-<div id="ba8eed29" class="cell" data-execution_count="36">
+<div id="af24fc6f" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a Poisson regression model using statsmodels</span></span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>poisson_model <span class="op">=</span> sm.GLM(Y, X, family<span class="op">=</span>sm.families.Poisson()).fit()</span>
@@ -1321,7 +1321,7 @@ Model Family:                 Poisson   Df Model:                            9
 Link Function:                    Log   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:            -2.2032e+05
 Date:                Wed, 12 Jun 2024   Deviance:                   3.4336e+05
-Time:                        09:59:00   Pearson chi2:                 4.58e+05
+Time:                        12:17:53   Pearson chi2:                 4.58e+05
 No. Iterations:                     5   Pseudo R-squ. (CS):             0.8026
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -1343,7 +1343,7 @@ x10           -0.0702      0.012     -6.036      0.000      -0.093      -0.047
 </div>
 <p>Our coefficients match, meaning per the data and our manipulation, we calculated the betas correctly.</p>
 <p>Below, we are grouping the some of the data to potentially get a better explanation and generate a reasonable hypothesis for the outcome of the betas.</p>
-<div id="9b141447" class="cell" data-execution_count="37">
+<div id="e4fe5ba3" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># grouping the data based on days (binning the days) and reviews_per_year (binning reviews per year)</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>airbnb[<span class="st">'days_bins'</span>] <span class="op">=</span> pd.cut(airbnb[<span class="st">'days'</span>], bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">400</span>, <span class="dv">50</span>))</span>
@@ -1354,7 +1354,7 @@ x10           -0.0702      0.012     -6.036      0.000      -0.093      -0.047
 <span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>days_reviews</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_53152/4142779578.py:7: FutureWarning:
+<pre><code>/tmp/ipykernel_63947/4142779578.py:7: FutureWarning:
 
 The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
 </code></pre>
@@ -1445,7 +1445,7 @@ The default of observed=False is deprecated and will be changed to True in a fut
 </div>
 </div>
 </div>
-<div id="5f50e068" class="cell" data-execution_count="38">
+<div id="7a1b6b3e" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># making each column in days_reviews proportional to the sum of the number in each row</span></span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>days_reviews[<span class="st">'sum'</span>] <span class="op">=</span> days_reviews.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
