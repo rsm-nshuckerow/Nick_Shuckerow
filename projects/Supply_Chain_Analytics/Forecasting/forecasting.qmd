@@ -136,7 +136,7 @@ unit_cost = 0.8
 
 demand['profit'] = np.where(demand['demand'] > avg_demand, retail*avg_demand - unit_cost*avg_demand, retail*demand['demand'] - unit_cost*avg_demand)
 
-avg_profit = np.round(demand.loc[:300, 'profit'].mean(), 2)
+avg_profit = np.round(demand.loc[300:, 'profit'].mean(), 2)
 
 print(f'The average profit for the last 200 weeks when using only the average demand for the past 300 weeks is ${avg_profit}')
 ```
@@ -226,8 +226,212 @@ profits
 
 Implementing SES method increased profits by nearly $3000 weekly!
 
+### SES Optimized
+
 Now we'll use and optimized alpha with the SES method. Keep in mind, alpha is being optimized based on forecast, not on profit. We'll see if the optimized alpha translates to increased profits.
 
 ```{python}
+SES_Opt_model = SimpleExpSmoothing(demand.loc[:300, 'demand']).fit(optimized=True)
 
+demand['SES_Opt_forecast'] = SES_Opt_model.fittedvalues
+demand.loc[300:, 'SES_Opt_forecast'] = SES_Opt_model.forecast(200)
+
+demand['SES_Opt_profit'] = np.where(demand['demand'] > demand['SES_Opt_forecast'], retail*demand['SES_Opt_forecast'] - unit_cost*demand['SES_Opt_forecast'], retail*demand['demand'] - unit_cost*demand['SES_Opt_forecast'])
+
+avg_SES_Opt_profit = np.round(demand.loc[300:, 'SES_Opt_profit'].mean(), 2)
+
+profits.loc['SES Optim.', 'Profit ($)'] = avg_SES_Opt_profit
+
+profits
 ```
+
+The optimized version did increase profits by about $25 weekly!
+
+As discussed previously, the optimization is happening based on the forecasts, and not profits. Let's see if we can find a better alpha which translates to higher profits. 
+
+```{python}
+SES_opt_alpha = SES_Opt_model.params['smoothing_level']
+
+SES_opt_alpha
+```
+
+```{python}
+alpha_list = []
+SES_profit_list = []
+
+for alpha in np.arange(0,1,0.01):
+    SES_Opt_model = SimpleExpSmoothing(demand.loc[:300, 'demand']).fit(smoothing_level = alpha, optimized=False)
+    demand['SES_Opt_forecast'] = SES_Opt_model.fittedvalues
+    demand.loc[300:, 'SES_Opt_forecast'] = SES_Opt_model.forecast(200)
+    demand['SES_Opt_profit'] = np.where(demand['demand'] > demand['SES_Opt_forecast'], retail*demand['SES_Opt_forecast'] - unit_cost*demand['SES_Opt_forecast'], retail*demand['demand'] - unit_cost*demand['SES_Opt_forecast'])
+    avg_SES_Opt_profit = np.round(demand.loc[300:, 'SES_Opt_profit'].mean(), 2)
+    alpha_list.append(alpha)
+    SES_profit_list.append(avg_SES_Opt_profit)
+```
+
+```{python}
+#| echo: false
+print(f' The maximum profit capable through SES method is ${np.max(SES_profit_list)} which resulted from an alpha value of {alpha_list[np.argmax(SES_profit_list)]}.')
+
+profits.loc['SES Best Profit', 'Profit ($)'] = np.max(SES_profit_list)
+
+profits
+```
+
+The previous optimized model was fairly close with an alpha of 0.08 when compared to the alpha which produces the best profit for the next 200 weeks. This is not always the case where the optimized alpha is close to the alpha which produces the best profit.
+
+This also depends on your strategy, whether its profit or hedging because you don't want to potentially overstock.
+
+## Holt's Linear Trend Method
+
+Now that we've seen the SES method in work, it's time for Holt's Linear Trend Method. As the name says, Holt's adds on to SES by introducing a trend in addition to the level.
+
+We can clearly see a trend in the demand, so forecasts and this profits should increase.
+
+Before we use Holt's, we'll first run a linear regression model to get an initial level and trend for our model by using the intercept and coefficient. This method can lead to better forecasting by having relatively accurate starting point.
+
+```{python}
+lr_model = LinearRegression().fit(demand.loc[:300, 't'].values.reshape(-1, 1), demand.loc[:300,'demand'].values)
+
+init_trend = lr_model.coef_[0] 
+
+init_level = lr_model.intercept_
+
+init_level, init_trend
+```
+
+Now that we have our initial trend and level, we'll implement those in Holt's model. We'll use 0.2 for alpha and beta for our initial calculations. We will plot the data as well to see how the forecasted demand follows the actual demand.
+
+```{python}
+Holt_model = Holt(demand.loc[:300,'demand'], initialization_method="known", initial_level=init_level, initial_trend=init_trend).fit(smoothing_level=0.2, smoothing_trend=0.2, optimized=False)
+demand['forecast_holt'] = Holt_model.fittedvalues
+demand.loc[300:, 'forecast_holt'] = Holt_model.forecast(200)
+```
+
+```{python}
+#| echo: false
+plt.plot(demand['t'], demand['demand'])
+plt.plot(demand.loc[:300, 't'], demand.loc[:300, 'forecast_holt'])
+plt.plot(demand.loc[300:, 't'], demand.loc[300:, 'forecast_holt'])
+plt.xlabel('Weeks')
+plt.ylabel('Demand')
+plt.title('Holt Forecast and Actual Demand vs Weeks')
+plt.legend(['Actual Demand', 'Holt Fitted Values', 'Holt Forecast'])
+plt.show()
+```
+
+The forecasted results are way off! The forecasts are decreasing rather than increasing. This is likely due to alpha and beta values combined with the large amount of variation in the data.
+
+A lower smoothing level means it has less weight in the most recent data and more weight in the past data. Same goes for a low smoothing trend. A low smoothing trend would mean it is less volatile to short term fluctuations, which there is plenty in this data. Maybe the alpha and beta values are too large, even though they're at the lower end of the range?
+
+Let's see what the optimized model comes up with.
+
+### Optimized Holts
+
+```{python}
+Holt_opt_model = Holt(demand.loc[:300,'demand'], initialization_method="known", initial_level=init_level, initial_trend=init_trend).fit(optimized=True)
+demand['forecast_holt_opt'] = Holt_opt_model.fittedvalues
+demand.loc[300:, 'forecast_holt_opt'] = Holt_opt_model.forecast(200)
+
+optimal_alpha = Holt_opt_model.model.params['smoothing_level']
+optimal_beta = Holt_opt_model.model.params['smoothing_trend']
+
+optimal_alpha, optimal_beta
+```
+
+The optimized holt parameters are even lower than 0.2! Alpha and beta are both close to 0, meaning that forecastingrelies on the long term trend and levels, and should not be misguided by short term fluctuations.
+
+Here's a plot of the optimized data.
+
+```{python}
+#| echo: false
+plt.plot(demand['t'], demand['demand'])
+plt.plot(demand.loc[:300, 't'], demand.loc[:300, 'forecast_holt_opt'])
+plt.plot(demand.loc[300:, 't'], demand.loc[300:, 'forecast_holt_opt'])
+plt.xlabel('Weeks')
+plt.ylabel('Demand')
+plt.title('Holt Forecast and Actual Demand vs Weeks')
+plt.legend(['Actual Demand', 'Holt Fitted Values', 'Holt Forecast'])
+plt.show()
+```
+
+The fitted values we used to train our optimized holt value have almost no fluctuation. It is nearly a perfect linear line, which it should be with a beta of 0.
+
+Now lets check our profits for both.
+
+```{python}
+#| echo: false
+demand['Holt_profit'] = np.where(demand['demand'] > demand['forecast_holt'], retail*demand['forecast_holt'] - unit_cost*demand['forecast_holt'], retail*demand['demand'] - unit_cost*demand['forecast_holt'])
+
+avg_Holt_profit = np.round(demand.loc[300:, 'Holt_profit'].mean(), 2)
+
+profits.loc['Holt', 'Profit ($)'] = avg_Holt_profit
+
+demand['Holt_opt_profit'] = np.where(demand['demand'] > demand['forecast_holt_opt'], retail*demand['forecast_holt_opt'] - unit_cost*demand['forecast_holt_opt'], retail*demand['demand'] - unit_cost*demand['forecast_holt_opt'])
+
+avg_Holt_opt_profit = np.round(demand.loc[300:, 'Holt_opt_profit'].mean(), 2)
+
+profits.loc['Holt Optim.', 'Profit ($)'] = avg_Holt_opt_profit
+
+profits
+```
+
+Profits are still better than just using the average or the cumulative average when alpha and beta are 0.2, but less than all profits with SES.
+
+However, our optimized Holt model did significantly better than any of the other models!
+
+Now lets see if we can find the best parameters with Holt's model for optimizing profit.
+
+```{python}
+alpha_list = []
+beta_list = []
+Holt_profit_list = []
+
+for alpha in np.arange(0,1,0.01):
+    for beta in np.arange(0,1,0.01):
+        Holt_profit_model = Holt(demand.loc[:300, 'demand'], initialization_method="known", initial_level=init_level, initial_trend=init_trend).fit(smoothing_level = alpha, smoothing_trend = beta, optimized=False)
+        demand['Holt_demand'] = Holt_profit_model.fittedvalues
+        demand.loc[300:, 'Holt_demand'] = Holt_profit_model.forecast(200)
+        demand['Holt_Opt_profit'] = np.where(demand['demand'] > demand['Holt_demand'], retail*demand['Holt_demand'] - unit_cost*demand['Holt_demand'], retail*demand['demand'] - unit_cost*demand['Holt_demand'])
+        avg_Holt_profit = np.round(demand.loc[300:, 'Holt_Opt_profit'].mean(), 2)
+        alpha_list.append(alpha)
+        beta_list.append(beta)
+        Holt_profit_list.append(avg_Holt_profit)
+```
+
+```{python}
+print(f'The optimal parameters in regards to profit were an alpha of {alpha_list[np.argmax(Holt_profit_list)]} and a beta of {np.round(beta_list[np.argmax(Holt_profit_list)], 2)}. This produced an average weekly profit of ${np.max(Holt_profit_list)}.')
+
+profits.loc['Holt Best Profit', 'Profit ($)'] = np.max(Holt_profit_list)
+
+profits
+```
+
+In contradiction, the optimal parameters in regards to profit had a higher alpha, but still low, meaning it using past data created better results than current data in regards to smoothing level. However, the smoothing trend was very high (close to 1), meaning it was best to follow the most recent changes in trend than historical trend. 
+
+Let's take a look at the plot to confirm.
+
+```{python}
+#| echo: false
+Holt_profit_model = Holt(demand.loc[:300, 'demand'], initialization_method="known", initial_level=init_level, initial_trend=init_trend).fit(smoothing_level = 0.07, smoothing_trend = 0.95, optimized=False)
+demand['Holt_demand'] = Holt_profit_model.fittedvalues
+demand.loc[300:, 'Holt_demand'] = Holt_profit_model.forecast(200)
+
+plt.plot(demand['t'], demand['demand'])
+plt.plot(demand.loc[:300, 't'], demand.loc[:300, 'Holt_demand'])
+plt.plot(demand.loc[300:, 't'], demand.loc[300:, 'Holt_demand'])
+plt.xlabel('Weeks')
+plt.ylabel('Demand')
+plt.title('Holt Forecast and Actual Demand vs Weeks')
+plt.legend(['Actual Demand', 'Holt Fitted Values', 'Holt Forecast'])
+plt.show()
+```
+
+The forecasted trend was still positive, but had a slightly higher slope than the optimized model. This caused the forecasts to be at the higher end of the actual demand in most weeks. Since the cost of understocking is much higher than overstocking, that was the difference in having the best possible profit using holt's linear trend method. 
+
+# Conclusion
+
+We went over multiple methods to forecast demand, with the main emphasis on Simple Exponential Smoothing and Holt's Linear Trend Method. SES does not account for trend, but does give weights to past values in order to determine how much the model should be using most recent and past values in its forecasting.
+
+Holt's method takes it a step further, incorporating a trend component into the equation, which allows the model to either increase, decrease, or stay the same depending on the parameters in your model and the data itself.
+
