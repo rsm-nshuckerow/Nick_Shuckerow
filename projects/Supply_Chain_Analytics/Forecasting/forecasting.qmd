@@ -247,6 +247,43 @@ profits
 
 The optimized version did increase profits by about $25 weekly!
 
+Another method to ensure you have enough inventory to meet your demand is implementing a safety stock. A saftey stock allows you to be ready for the fluctuations in your demand. It is calculated by determing your cost of understocking and overstocking. Once you have those metrics, you determine your target service level, which the percentile of safety stock you want to keep on hand based on your error in your forecast to the actual demand. The Cost of understocking and overstocking are:
+
+$$ Cu = retailprice - unitcost $$
+$$ Cu = unitcost - salvagevalue $$
+
+The formula for Target Service Level is:
+
+$$ TSL = Cu/(Cu-Co) $$
+
+Let's find the profit for our optimized SES model when incorporating a safety stock. First we'll find the Target service level.
+
+```{python}
+Cu = retail - unit_cost
+Co = unit_cost
+TSL = Cu/(Cu-Co)
+TSL
+```
+
+Our TSL for this product is 0.8, or 80% service level. We'll use that to find our safety stock.
+
+```{python}
+def cumulative_quantile(x):
+    return x.expanding().quantile(0.8)
+demand['error_op'] = demand['demand'] - demand['SES_Opt_forecast']
+demand['cum_error_optim'] = demand['error_op'].transform(cumulative_quantile)
+demand['stockQ_op'] = demand['SES_Opt_forecast'] + demand['cum_error_optim']
+demand['profit_op'] = np.where(demand['demand'] > demand['stockQ_op'], retail*demand['stockQ_op'] - unit_cost*demand['stockQ_op'], retail*demand['demand'] - unit_cost*demand['stockQ_op'])
+
+avg_SES_Opt_safety_profit = np.round(demand.loc[300:, 'profit_op'].mean(), 2)
+
+profits.loc['SES Optim. Safety', 'Profit ($)'] = avg_SES_Opt_safety_profit
+
+profits
+```
+
+Profits increased by over $350 weekly!
+
 As discussed previously, the optimization is happening based on the forecasts, and not profits. Let's see if we can find a better alpha which translates to higher profits. 
 
 ```{python}
@@ -278,7 +315,7 @@ profits.loc['SES Best Profit', 'Profit ($)'] = np.max(SES_profit_list)
 profits
 ```
 
-The previous optimized model was fairly close with an alpha of 0.08 when compared to the alpha which produces the best profit for the next 200 weeks. This is not always the case where the optimized alpha is close to the alpha which produces the best profit.
+The previous optimized model was fairly close with an alpha of 0.08 when compared to the alpha which produces the best profit for the next 200 weeks. This is not always the case where the optimized alpha is close to the alpha which produces the best profit. The optimzied model based on profit was less than when we incorporated safety stock, but still more than using the optimized parameters based on forecast. 
 
 This also depends on your strategy, whether its profit or hedging because you don't want to potentially overstock.
 
@@ -379,6 +416,23 @@ profits
 Profits are still better than just using the average or the cumulative average when alpha and beta are 0.2, but less than all profits with SES.
 
 However, our optimized Holt model did significantly better than any of the other models!
+
+Before optimizing on profit rather than forecast, lets see what implementing a safety stock does for Holts.
+
+```{python}
+demand['error_op'] = demand['demand'] - demand['forecast_holt_opt']
+demand['cum_error_optim'] = demand['error_op'].transform(cumulative_quantile)
+demand['stockQ_op'] = demand['forecast_holt_opt'] + demand['cum_error_optim']
+demand['profit_op'] = np.where(demand['demand'] > demand['stockQ_op'], retail*demand['stockQ_op'] - unit_cost*demand['stockQ_op'], retail*demand['demand'] - unit_cost*demand['stockQ_op'])
+
+avg_Holt_Opt_safety_profit = np.round(demand.loc[300:, 'profit_op'].mean(), 2)
+
+profits.loc['Holt Optim. Safety', 'Profit ($)'] = avg_Holt_Opt_safety_profit
+
+profits
+```
+
+Profit's increased by about $80 a week!
 
 Now lets see if we can find the best parameters with Holt's model for optimizing profit.
 
