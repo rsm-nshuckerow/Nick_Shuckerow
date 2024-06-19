@@ -1,5 +1,6 @@
 ---
 title: "Forecasting Methods"
+image: "Files/forecasting.jpg"
 author: "Nicholas Shuckerow"
 date: today
 format: html
