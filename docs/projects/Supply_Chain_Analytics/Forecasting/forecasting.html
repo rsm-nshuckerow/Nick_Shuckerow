@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nicholas Shuckerow">
-<meta name="dcterms.date" content="2024-06-18">
+<meta name="dcterms.date" content="2024-07-01">
 
 <title>Nick_Shuckerow - Forecasting Methods</title>
 <style>
@@ -204,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 18, 2024</p>
+      <p class="date">July 1, 2024</p>
     </div>
   </div>
   
@@ -275,7 +275,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="initial-setup" class="level2">
 <h2 class="anchored" data-anchor-id="initial-setup">Initial Setup</h2>
 <p>Let’s start by loading the data and taking a look at the first few rows and some basic analysis.</p>
-<div id="6e5c3dbc" class="cell" data-execution_count="2">
+<div id="ee18972f" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
@@ -320,7 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="d53fd54e" class="cell" data-execution_count="3">
+<div id="d245bf15" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
@@ -381,7 +381,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We can see that the mean demand among the dataset is 3012 cupcakes with a standard deviation of 678. We’ve confirmed there are 500 data points in the dataset through the “counts” variable. We’ll take a look at the plot of the data.</p>
-<div id="c668c0d7" class="cell" data-execution_count="4">
+<div id="61017050" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>plt.plot(demand[<span class="st">'t'</span>], demand[<span class="st">'demand'</span>])</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Weeks'</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Demand'</span>)</span>
@@ -402,13 +402,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="average-1" class="level2">
 <h2 class="anchored" data-anchor-id="average-1">Average</h2>
 <p>As stated previously, averaging is the most common and simple method for forecasting. It could be moving average, or a cumulative average. Lets see what our average is for the first 300 weeks.</p>
-<div id="118c64b6" class="cell" data-execution_count="5">
+<div id="711679b9" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
 <pre><code>The average demand for cupcakes in the first 300 weeks is 2600.0 cupcakes</code></pre>
 </div>
 </div>
 <p>With our average demand, lets determine how much profit we would make in the last 200 weeks.</p>
-<div id="5d36d0a8" class="cell" data-execution_count="6">
+<div id="bc356b92" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>retail <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>unit_cost <span class="op">=</span> <span class="fl">0.8</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -421,7 +421,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>The average profit for the last 200 weeks when using only the average demand for the past 300 weeks is $8320.0</code></pre>
 </div>
 </div>
-<div id="0c40fd7b" class="cell" data-execution_count="7">
+<div id="1b6a7bc8" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>profits <span class="op">=</span> pd.DataFrame({<span class="st">'Profit ($)'</span>:[avg_profit]}, index<span class="op">=</span>[<span class="st">'Avg'</span>])</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>profits</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -451,11 +451,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="cumulative-average" class="level3">
 <h3 class="anchored" data-anchor-id="cumulative-average">Cumulative Average</h3>
 <p>Now, it doesn’t matter about the past 300 weeks, since we are calculating a new average after every week, but we’ll still only calculate the average weekly profit for the last 200 weeks for comparison.</p>
-<div id="68031a30" class="cell" data-execution_count="8">
+<div id="9fb3855c" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'cum_avg_demand'</span>] <span class="op">=</span> demand[<span class="st">'demand'</span>].expanding().mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s see what the cumulative average demand looks like when plotted.</p>
-<div id="acd004c7" class="cell" data-execution_count="9">
+<div id="bf975aa2" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plt.plot(demand[<span class="st">'t'</span>], demand[<span class="st">'cum_avg_demand'</span>])</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Weeks'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Cumulative Demand'</span>)</span>
@@ -470,7 +470,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>As expected, the cumulative average has much less variation as the weeks go on, and takes a very linear trend line.</p>
-<div id="ced17e61" class="cell" data-execution_count="10">
+<div id="1dfb4f56" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'cum_profit'</span>] <span class="op">=</span> np.where(demand[<span class="st">'demand'</span>] <span class="op">&gt;</span> demand[<span class="st">'cum_avg_demand'</span>], retail<span class="op">*</span>demand[<span class="st">'cum_avg_demand'</span>] <span class="op">-</span> unit_cost<span class="op">*</span>demand[<span class="st">'cum_avg_demand'</span>], retail<span class="op">*</span>demand[<span class="st">'demand'</span>] <span class="op">-</span> unit_cost<span class="op">*</span>demand[<span class="st">'cum_avg_demand'</span>])</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>avg_cum_profit <span class="op">=</span> np.<span class="bu">round</span>(demand.loc[<span class="dv">300</span>:, <span class="st">'cum_profit'</span>].mean(), <span class="dv">2</span>)</span>
@@ -480,7 +480,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>The average profit for the last 200 weeks when using the cumulative average demand is $8968.06</code></pre>
 </div>
 </div>
-<div id="6509c48d" class="cell" data-execution_count="11">
+<div id="37515816" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>profits.loc[<span class="st">'Avg Cumul.'</span>, <span class="st">'Profit ($)'</span>] <span class="op">=</span> avg_cum_profit</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>profits</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -517,13 +517,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="simple-exponential-smoothing-1">Simple Exponential Smoothing</h2>
 <p>As discussed previously, Simple Exponential Smoothing (SES) assigns a weight to the current and previous level. If the weight (alpha) is high (closer to 1), that means the most recent data will weigh more heavily into the forecast than the past data points. On the opposite end, if alpha is low, it means the past data is used more to make the next forecast.</p>
 <p>Let’s implement the SES method into our data. We’ll use a smoothing level of 0.2 initially and take a look at the plot.</p>
-<div id="1f8f9c52" class="cell" data-execution_count="12">
+<div id="beb98939" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>SES_model <span class="op">=</span> SimpleExpSmoothing(demand.loc[:<span class="dv">300</span>, <span class="st">'demand'</span>]).fit(smoothing_level<span class="op">=</span><span class="fl">0.2</span>, optimized<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'SES_forecast'</span>] <span class="op">=</span> SES_model.fittedvalues</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>demand.loc[<span class="dv">300</span>:, <span class="st">'SES_forecast'</span>] <span class="op">=</span> SES_model.forecast(<span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="03b8cf6e" class="cell" data-execution_count="13">
+<div id="29b76dc4" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -534,7 +534,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The SES method produces a singular value for the last 200 weeks. This is correct, and is why SES method is not always used. As seen in the formula, it uses keeps using the last actual value to make the next predicition. Once we want to forecast, it produces a singular value for all the future forecasts until you want to recalculate.</p>
 <p>Lets calculate the profit for SES non-optimized version.</p>
-<div id="32bd8601" class="cell" data-execution_count="14">
+<div id="1dacb236" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'SES_profit'</span>] <span class="op">=</span> np.where(demand[<span class="st">'demand'</span>] <span class="op">&gt;</span> demand[<span class="st">'SES_forecast'</span>], retail<span class="op">*</span>demand[<span class="st">'SES_forecast'</span>] <span class="op">-</span> unit_cost<span class="op">*</span>demand[<span class="st">'SES_forecast'</span>], retail<span class="op">*</span>demand[<span class="st">'demand'</span>] <span class="op">-</span> unit_cost<span class="op">*</span>demand[<span class="st">'SES_forecast'</span>])</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>avg_SES_profit <span class="op">=</span> np.<span class="bu">round</span>(demand.loc[<span class="dv">300</span>:, <span class="st">'SES_profit'</span>].mean(), <span class="dv">2</span>)</span>
@@ -576,7 +576,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ses-optimized" class="level3">
 <h3 class="anchored" data-anchor-id="ses-optimized">SES Optimized</h3>
 <p>Now we’ll use and optimized alpha with the SES method. Keep in mind, alpha is being optimized based on forecast, not on profit. We’ll see if the optimized alpha translates to increased profits.</p>
-<div id="711fe441" class="cell" data-execution_count="15">
+<div id="86102803" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>SES_Opt_model <span class="op">=</span> SimpleExpSmoothing(demand.loc[:<span class="dv">300</span>, <span class="st">'demand'</span>]).fit(optimized<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'SES_Opt_forecast'</span>] <span class="op">=</span> SES_Opt_model.fittedvalues</span>
@@ -629,7 +629,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The formula for Target Service Level is:</p>
 <p><span class="math display">\[ TSL = Cu/(Cu-Co) \]</span></p>
 <p>Let’s find the profit for our optimized SES model when incorporating a safety stock. First we’ll find the Target service level.</p>
-<div id="09dc84cb" class="cell" data-execution_count="16">
+<div id="66f9f121" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Cu <span class="op">=</span> retail <span class="op">-</span> unit_cost</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Co <span class="op">=</span> unit_cost</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>TSL <span class="op">=</span> Cu<span class="op">/</span>(Cu<span class="op">-</span>Co)</span>
@@ -639,7 +639,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Our TSL for this product is 0.8, or 80% service level. We’ll use that to find our safety stock.</p>
-<div id="c8731bed" class="cell" data-execution_count="17">
+<div id="a9af487e" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cumulative_quantile(x):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x.expanding().quantile(<span class="fl">0.8</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'error_op'</span>] <span class="op">=</span> demand[<span class="st">'demand'</span>] <span class="op">-</span> demand[<span class="st">'SES_Opt_forecast'</span>]</span>
@@ -692,7 +692,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Profits increased by over $350 weekly!</p>
 <p>As discussed previously, the optimization is happening based on the forecasts, and not profits. Let’s see if we can find a better alpha which translates to higher profits.</p>
-<div id="2465ac48" class="cell" data-execution_count="18">
+<div id="a26b8517" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>SES_opt_alpha <span class="op">=</span> SES_Opt_model.params[<span class="st">'smoothing_level'</span>]</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>SES_opt_alpha</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -700,7 +700,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>0.08742752183220932</code></pre>
 </div>
 </div>
-<div id="e4fa1132" class="cell" data-execution_count="19">
+<div id="b98e1245" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>alpha_list <span class="op">=</span> []</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>SES_profit_list <span class="op">=</span> []</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -713,7 +713,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    alpha_list.append(alpha)</span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    SES_profit_list.append(avg_SES_Opt_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="a2aed20f" class="cell" data-execution_count="20">
+<div id="e259c2bc" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-stdout">
 <pre><code> The maximum profit capable through SES method is $10260.53 which resulted from an alpha value of 0.12.</code></pre>
 </div>
@@ -768,7 +768,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Now that we’ve seen the SES method in work, it’s time for Holt’s Linear Trend Method. As the name says, Holt’s adds on to SES by introducing a trend in addition to the level.</p>
 <p>We can clearly see a trend in the demand, so forecasts and this profits should increase.</p>
 <p>Before we use Holt’s, we’ll first run a linear regression model to get an initial level and trend for our model by using the intercept and coefficient. This method can lead to better forecasting by having relatively accurate starting point.</p>
-<div id="1c96cb78" class="cell" data-execution_count="21">
+<div id="3455f14c" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>lr_model <span class="op">=</span> LinearRegression().fit(demand.loc[:<span class="dv">300</span>, <span class="st">'t'</span>].values.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), demand.loc[:<span class="dv">300</span>,<span class="st">'demand'</span>].values)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>init_trend <span class="op">=</span> lr_model.coef_[<span class="dv">0</span>] </span>
@@ -781,12 +781,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now that we have our initial trend and level, we’ll implement those in Holt’s model. We’ll use 0.2 for alpha and beta for our initial calculations. We will plot the data as well to see how the forecasted demand follows the actual demand.</p>
-<div id="8adf73b0" class="cell" data-execution_count="22">
+<div id="caaf0fcd" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Holt_model <span class="op">=</span> Holt(demand.loc[:<span class="dv">300</span>,<span class="st">'demand'</span>], initialization_method<span class="op">=</span><span class="st">"known"</span>, initial_level<span class="op">=</span>init_level, initial_trend<span class="op">=</span>init_trend).fit(smoothing_level<span class="op">=</span><span class="fl">0.2</span>, smoothing_trend<span class="op">=</span><span class="fl">0.2</span>, optimized<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'forecast_holt'</span>] <span class="op">=</span> Holt_model.fittedvalues</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>demand.loc[<span class="dv">300</span>:, <span class="st">'forecast_holt'</span>] <span class="op">=</span> Holt_model.forecast(<span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="97aafd3b" class="cell" data-execution_count="23">
+<div id="94f6b4e7" class="cell" data-execution_count="23">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -800,7 +800,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s see what the optimized model comes up with.</p>
 <section id="optimized-holts" class="level3">
 <h3 class="anchored" data-anchor-id="optimized-holts">Optimized Holts</h3>
-<div id="b6aa27a1" class="cell" data-execution_count="24">
+<div id="dc55b191" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Holt_opt_model <span class="op">=</span> Holt(demand.loc[:<span class="dv">300</span>,<span class="st">'demand'</span>], initialization_method<span class="op">=</span><span class="st">"known"</span>, initial_level<span class="op">=</span>init_level, initial_trend<span class="op">=</span>init_trend).fit(optimized<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'forecast_holt_opt'</span>] <span class="op">=</span> Holt_opt_model.fittedvalues</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>demand.loc[<span class="dv">300</span>:, <span class="st">'forecast_holt_opt'</span>] <span class="op">=</span> Holt_opt_model.forecast(<span class="dv">200</span>)</span>
@@ -815,7 +815,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The optimized holt parameters are even lower than 0.2! Alpha and beta are both close to 0, meaning that forecastingrelies on the long term trend and levels, and should not be misguided by short term fluctuations.</p>
 <p>Here’s a plot of the optimized data.</p>
-<div id="56ed6e3c" class="cell" data-execution_count="25">
+<div id="541ad522" class="cell" data-execution_count="25">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -826,7 +826,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The fitted values we used to train our optimized holt value have almost no fluctuation. It is nearly a perfect linear line, which it should be with a beta of 0.</p>
 <p>Now lets check our profits for both.</p>
-<div id="7ad990aa" class="cell" data-execution_count="26">
+<div id="92ed19ea" class="cell" data-execution_count="26">
 <div class="cell-output cell-output-display" data-execution_count="26">
 <div>
 
@@ -880,7 +880,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Profits are still better than just using the average or the cumulative average when alpha and beta are 0.2, but less than all profits with SES.</p>
 <p>However, our optimized Holt model did significantly better than any of the other models!</p>
 <p>Before optimizing on profit rather than forecast, lets see what implementing a safety stock does for Holts.</p>
-<div id="5e2c186a" class="cell" data-execution_count="27">
+<div id="350948b7" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'error_op'</span>] <span class="op">=</span> demand[<span class="st">'demand'</span>] <span class="op">-</span> demand[<span class="st">'forecast_holt_opt'</span>]</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'cum_error_optim'</span>] <span class="op">=</span> demand[<span class="st">'error_op'</span>].transform(cumulative_quantile)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>demand[<span class="st">'stockQ_op'</span>] <span class="op">=</span> demand[<span class="st">'forecast_holt_opt'</span>] <span class="op">+</span> demand[<span class="st">'cum_error_optim'</span>]</span>
@@ -947,7 +947,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Profit’s increased by about $80 a week!</p>
 <p>Now lets see if we can find the best parameters with Holt’s model for optimizing profit.</p>
-<div id="10ad1414" class="cell" data-execution_count="28">
+<div id="fdacd1ea" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>alpha_list <span class="op">=</span> []</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>beta_list <span class="op">=</span> []</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>Holt_profit_list <span class="op">=</span> []</span>
@@ -963,7 +963,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        beta_list.append(beta)</span>
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>        Holt_profit_list.append(avg_Holt_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="57dc20fe" class="cell" data-execution_count="29">
+<div id="e3e90e98" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'The optimal parameters in regards to profit were an alpha of </span><span class="sc">{</span>alpha_list[np.argmax(Holt_profit_list)]<span class="sc">}</span><span class="ss"> and a beta of </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(beta_list[np.argmax(Holt_profit_list)], <span class="dv">2</span>)<span class="sc">}</span><span class="ss">. This produced an average weekly profit of $</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(Holt_profit_list)<span class="sc">}</span><span class="ss">.'</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>profits.loc[<span class="st">'Holt Best Profit'</span>, <span class="st">'Profit ($)'</span>] <span class="op">=</span> np.<span class="bu">max</span>(Holt_profit_list)</span>
@@ -1032,7 +1032,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>In contradiction, the optimal parameters in regards to profit had a higher alpha, but still low, meaning it using past data created better results than current data in regards to smoothing level. However, the smoothing trend was very high (close to 1), meaning it was best to follow the most recent changes in trend than historical trend.</p>
 <p>Let’s take a look at the plot to confirm.</p>
-<div id="67aeecdc" class="cell" data-execution_count="30">
+<div id="146251b2" class="cell" data-execution_count="30">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">

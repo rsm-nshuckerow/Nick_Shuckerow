@@ -1,5 +1,12 @@
 [
   {
+    "listing": "/projects/Supply_Chain_Analytics/index.html",
+    "items": [
+      "/projects/Supply_Chain_Analytics/Forecasting/forecasting.html",
+      "/projects/Supply_Chain_Analytics/Throughput/throughput.html"
+    ]
+  },
+  {
     "listing": "/projects/Marketing_Analytics/index.html",
     "items": [
       "/projects/Marketing_Analytics/HW1/hw1_questions.html",
@@ -7,12 +14,6 @@
       "/projects/Marketing_Analytics/HW3/hw3_questions.html",
       "/projects/Marketing_Analytics/HW2/hw2_questions.html",
       "/projects/Marketing_Analytics/HW5/hw5_questions.html"
-    ]
-  },
-  {
-    "listing": "/projects/Supply_Chain_Analytics/index.html",
-    "items": [
-      "/projects/Supply_Chain_Analytics/Forecasting/forecasting.html"
     ]
   }
 ]

@@ -2,7 +2,9 @@
 title: "Projects"
 ---
 
-# Projects by Subject
+## Projects by Subject
+
+Click on the below image to show projects for that subject
 
 ## Marketing Analytics
 [![Marketing Analytics](marketing-analytics.jpg)](projects/Marketing_Analytics/index.html)
