@@ -11,3 +11,6 @@ Click on the below image to show projects for that subject
 
 ## Supply Chain Analytics
 [![Supply Chain Analytics](supply_chain_analytics.jpg)](projects/Supply_Chain_Analytics/index.html)
+
+## Collecting and Analyzing Large Data
+[![Collecting and Analyzing Large Data](big_data.png)](projects/Analyzing_Data/index.html)

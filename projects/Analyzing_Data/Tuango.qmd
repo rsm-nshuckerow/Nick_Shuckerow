@@ -1,0 +1,45 @@
+---
+title: "Tuango Case Study"
+image: "Files/neiss.jpg"
+author: "Nicholas Shuckerow"
+date: today
+format: html
+---
+
+# Case Background
+
+Tuango is a “deal-of-the-day” website in China, similar to Groupon, offering discounted gift certificates for local or national retailers. The name "Tuango" sounds like "group buying" in Chinese, reflecting the collective purchasing model.
+
+Tuango's mobile campaigns typically involve selecting customers interested in a deal's category, ensuring they live close to the promoted store if applicable, and pushing the offer through the mobile app. However, we are questioning the assumption that sending offer messages is cost-free, recognizing the risk of customers blocking messages if they received too many irrelevant offers.
+
+Our goal is a build a targeting model based on a customer's profile and spending habits, in order to accurately determine who we should be targeting. 
+
+The deal we are evaluating is a 30-minute karaoke session offered by a large karaoke chain. The deal was priced at 49 RMB per 30-minute session, and up to a dozen such sessions could be purchased. Tuango’s fee was 50% of the  deal price when a deal was sold to consumers (similar to Groupon in the US). Similar deals had  already been successful in other cities, particularly with middle-aged customers and those that had purchased music related deals.
+
+We've received the dataset of customers who were offered the deal and the results.
+
+Below describes the variables in the dataset:
+
+## Variable Names and Descriptions:
+userid: Unique user ID
+
+### Response to the customized push message
+buyer: Did the customer buy the Karaoke deal? ("yes" or "no")
+ordersize: Number of 30-minute Karaoke sessions the customer purchased
+
+### Recency, Frequency, and Monetary variables
+recency: Days since last purchase of a deal (before the Karaoke deal offer)
+frequency: Number of deals purchased during the one year period before the Karaoke deal offer
+monetary: Average amount spent per order (in RMB) during the one year period before the Karaoke deal offer
+
+### Other variables in the dataset
+age: Age of the customer
+gender: Gender identity of the customer (M = male, F = female, O = Other or unknown)
+music: Customer made a purchase in the music category during the one-year period before the Karaoke deal offer ("no" or "yes")
+test: Splits the dataset into test (1) and rollout (0) data
+training: Splits the dataset into training (1) and test (0) data. This variable will not be used in this assignment
+
+# Data Preparation
+
+First, we'll load the dataset and take a look.
+
